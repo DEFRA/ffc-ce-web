@@ -1,6 +1,6 @@
 # FFC Calculation Engine
 
-Boilerplate text.
+This is a demo application for the FFC Calculation Engine
 
 ## Prerequisites
 
