@@ -42,8 +42,6 @@ spec:
           value: {{ quote .Values.environment }}
         - name: PORT
           value: "3000"
-        - name: COOKIE_PASSWORD
-          value: {{ quote .Values.container.cookiePassword }}
         - name: PAYMENT_URL
           value: {{ quote .Values.container.paymentUrl }}
         - name: COOKIE_PASSWORD
