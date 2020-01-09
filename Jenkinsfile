@@ -34,7 +34,6 @@ def getExtraCommands(pr, containerTag, ingressServer) {
       /ingress.alb.arn="$albArn"/,
       /ingress.alb.securityGroups="$albSecurityGroups"/,
       /ingress.endpoint="ffc-ce-web-$containerTag"/,
-      /ingress.endpoint="ffc-ce-web"/,
       /ingress.server="$ingressServer"/
     ].join(',')
 
