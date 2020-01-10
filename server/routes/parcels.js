@@ -1,6 +1,6 @@
 const parcelService = require('../services/parcels-service')
 const parcelModel = require('../models/parcels-model')
-const actionSchema = require('../schemas/action-schema')
+const parcelPostSchema = require('../schemas/parcels-post-schema')
 const cacheKey = 'parcelRef'
 
 module.exports = [
@@ -24,10 +24,9 @@ module.exports = [
     },
     options: {
       validate: {
-        payload: actionSchema,
+        payload: parcelPostSchema,
         failAction: async (request, h) => {
           const parcels = await parcelService.getParcels()
-          console.log(parcels)
           const model = parcelModel(parcels, 'You must choose a parcel')
           return h.view('parcels', { model }).takeover()
         }

@@ -7,14 +7,5 @@ module.exports = [
         return h.view('home')
       }
     }
-  },
-  {
-    method: 'POST',
-    path: '/',
-    options: {
-      handler: (request, h) => {
-        return h.redirect('/parcels')
-      }
-    }
   }
 ]
