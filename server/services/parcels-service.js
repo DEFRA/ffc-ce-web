@@ -6,7 +6,7 @@ const wreck = require('@hapi/wreck').defaults({
 async function getParcels (email) {
   const response = await wreck.get(`${config.paymentUrl}/parcels`, { json: true })
   const body = response.payload && response.payload.toString()
-  return JSON.parse(body)
+  return body && JSON.parse(body)
 }
 
 module.exports = { getParcels }
