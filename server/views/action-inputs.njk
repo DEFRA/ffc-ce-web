@@ -1,0 +1,20 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block content %}
+  <div class="govuk-body">
+    <h1> Inputs for Action {{ model.actionRef }} </h1>
+    <form method="get" action="/calculation-result">
+      {{ govukInput({
+        label: {
+          text: "Proposed fence length"
+        }
+      }) }}
+      {{ govukButton({
+        text: "Calculate"
+      }) }}
+    </form>
+  </div>
+{% endblock %}
