@@ -90,5 +90,6 @@ describe('Parcels route test', () => {
 
   afterAll(() => {
     jest.unmock('../../server/services/parcels-service')
+    jest.unmock('../../server/services/actions-service')
   })
 })
