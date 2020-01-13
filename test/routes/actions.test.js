@@ -45,7 +45,7 @@ describe('Actions route test', () => {
     expect(response.payload).toContain(action.id)
   })
 
-  test('POST /actions route redirects to GET /action-input if action chosen', async () => {
+  test('POST /actions route redirects to GET /action-inputs if action chosen', async () => {
     const postOptions = {
       method: 'POST',
       url: '/actions',
@@ -56,6 +56,7 @@ describe('Actions route test', () => {
 
     const postResponse = await server.inject(postOptions)
     expect(postResponse.statusCode).toBe(302)
+    expect(postResponse.headers.location).toBe('/action-inputs')
 
     const getResponse = await server.inject(getRedirectOptions(postResponse))
     expect(getResponse.statusCode).toBe(200)

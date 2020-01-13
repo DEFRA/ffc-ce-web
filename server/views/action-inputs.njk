@@ -5,7 +5,9 @@
 
 {% block content %}
   <div class="govuk-body">
-    <h1> Inputs for Action {{ model.actionRef }} </h1>
+    <h1> Action Inputs </h1>
+    <h2> Parcel: {{ model.parcelRef }} </h2>
+    <h2> Action: {{ model.actionId }} </h2>
     <form method="get" action="/calculation-result">
       {{ govukInput({
         label: {

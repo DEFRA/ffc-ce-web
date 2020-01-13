@@ -19,7 +19,7 @@ module.exports = [
     path: '/actions',
     handler: function (request, h) {
       request.yar.set(cacheKey, request.payload.actionId)
-      return h.redirect('/action-input')
+      return h.redirect('/action-inputs')
     },
     options: {
       validate: {

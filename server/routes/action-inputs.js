@@ -3,8 +3,12 @@ module.exports = [
     method: 'GET',
     path: '/action-inputs',
     handler: async (request, h) => {
-      const actionRef = 'FG1' // request.yar.get('parcelRef')
-      const model = { actionRef }
+      const parcelRef = request.yar.get('parcelRef')
+      const actionId = request.yar.get('actionId')
+      const model = {
+        parcelRef,
+        actionId
+      }
       return h.view('action-inputs', { model })
     }
   },
