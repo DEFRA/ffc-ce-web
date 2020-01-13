@@ -28,7 +28,7 @@ describe('parcelService', () => {
 
   test('get parcels return JSON', async () => {
     const mockParcels = { parcels: [{ ref: '1234' }] }
-    payload = { toString: () => JSON.stringify(mockParcels) }
+    payload = mockParcels
     const result = await parcelsService.getParcels()
     expect(result).toBeDefined()
     expect(result.length).toEqual(1)
