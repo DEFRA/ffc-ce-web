@@ -16,6 +16,12 @@ function stubWreckCall () {
 
 describe('parcelService', () => {
   beforeAll(async () => {
+    // I tried to stub the call before each, but only the return setup in the first test
+    // was returned, despite trying a combination of clear/reset mocks so I resorted to
+    // setting the payload to a local variable that can be changed before each test
+    // https://github.com/facebook/jest/issues/7136
+    // issue was fixed in November. but not perhaps not made it into the lastest version,
+    // though there are still requests on the issue above to reopen the bug
     stubWreckCall()
     parcelsService = require('../../server/services/parcels-service')
   })
@@ -35,7 +41,7 @@ describe('parcelService', () => {
     expect(result).toBeUndefined()
   })
 
-  afterEach(async () => {
+  afterAll(async () => {
     jest.unmock('@hapi/wreck')
   })
 })
