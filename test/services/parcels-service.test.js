@@ -15,7 +15,7 @@ function stubWreckCall () {
 }
 
 describe('parcelService', () => {
-  beforeAll(async () => {
+  beforeAll(() => {
     // I tried to stub the call before each, but only the return setup in the first test
     // was returned, despite trying a combination of clear/reset mocks so I resorted to
     // setting the payload to a local variable that can be changed before each test
@@ -42,7 +42,7 @@ describe('parcelService', () => {
     expect(result.length).toEqual(0)
   })
 
-  afterAll(async () => {
+  afterAll(() => {
     jest.unmock('@hapi/wreck')
   })
 })

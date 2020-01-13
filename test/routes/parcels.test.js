@@ -1,5 +1,5 @@
 let parcelsService
-const parcel = { ref: 'one' }
+const parcel = { ref: 'SD75492628' }
 function createMocks () {
   jest.mock('../../server/services/parcels-service')
   parcelsService = require('../../server/services/parcels-service')
@@ -20,11 +20,11 @@ function getRedirectOptions (response) {
   }
 }
 
-describe('Parcels test', () => {
+describe('Parcels route test', () => {
   let createServer
   let server
 
-  beforeAll(async () => {
+  beforeAll(() => {
     createMocks()
     createServer = require('../../server/createServer')
   })
@@ -41,6 +41,7 @@ describe('Parcels test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+    expect(response.payload).toContain(parcel.ref)
   })
 
   test('POST /parcels route redirects to GET /actions if parcel chosen', async () => {
