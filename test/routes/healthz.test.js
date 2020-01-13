@@ -1,8 +1,8 @@
-describe('Healthz test', () => {
+describe('Healthz route test', () => {
   let createServer
   let server
 
-  beforeAll(async () => {
+  beforeAll(() => {
     createServer = require('../../server/createServer')
   })
 
