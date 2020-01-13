@@ -7,12 +7,10 @@ module.exports = [
   {
     method: 'GET',
     path: '/parcels',
-    options: {
-      handler: async (request, h) => {
-        const parcels = await parcelService.getParcels()
-        const model = parcelModel(parcels)
-        return h.view('parcels', { model })
-      }
+    handler: async (request, h) => {
+      const parcels = await parcelService.getParcels()
+      const model = parcelModel(parcels)
+      return h.view('parcels', { model })
     }
   },
   {
