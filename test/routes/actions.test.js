@@ -1,14 +1,7 @@
-let parcelsService
-const parcel = { ref: 'SD75492628' }
-
 let actionsService
 const action = { id: 'FG1', description: 'Fencing' }
 
 function createMocks () {
-  jest.mock('../../server/services/parcels-service')
-  parcelsService = require('../../server/services/parcels-service')
-  parcelsService.getParcels = () => { return Promise.resolve([parcel]) }
-
   jest.mock('../../server/services/actions-service')
   actionsService = require('../../server/services/actions-service')
   actionsService.getActions = () => { return Promise.resolve([action]) }
@@ -28,7 +21,7 @@ function getRedirectOptions (response) {
   }
 }
 
-describe('Parcels route test', () => {
+describe('Actions route test', () => {
   let createServer
   let server
 
@@ -41,23 +34,23 @@ describe('Parcels route test', () => {
     server = await createServer()
     await server.initialize()
   })
-  test('GET /parcels route returns 200', async () => {
+  test('GET /actions route returns 200', async () => {
     const options = {
       method: 'GET',
-      url: '/parcels'
+      url: '/actions'
     }
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(response.payload).toContain(parcel.ref)
+    expect(response.payload).toContain(action.id)
   })
 
-  test('POST /parcels route redirects to GET /actions if parcel chosen', async () => {
+  test('POST /actions route redirects to GET /action-input if action chosen', async () => {
     const postOptions = {
       method: 'POST',
-      url: '/parcels',
+      url: '/actions',
       payload: {
-        parcelRef: parcel.ref
+        actionId: action.id
       }
     }
 
@@ -67,21 +60,21 @@ describe('Parcels route test', () => {
     const getResponse = await server.inject(getRedirectOptions(postResponse))
     expect(getResponse.statusCode).toBe(200)
     // verify service response is rendered on the page
-    expect(getResponse.payload).toContain(parcel.ref)
+    expect(getResponse.payload).toContain(action.id)
   })
 
-  test('POST /parcels route returns error message in body if no parcel chosen', async () => {
+  test('POST /actions route returns error message in body if no action chosen', async () => {
     const postOptions = {
       method: 'POST',
-      url: '/parcels',
+      url: '/actions',
       payload: {
-        parcelRef: undefined
+        actionId: undefined
       }
     }
 
     const postResponse = await server.inject(postOptions)
     expect(postResponse.statusCode).toBe(200)
-    expect(postResponse.payload).toContain('You must choose a parcel')
+    expect(postResponse.payload).toContain('You must choose an action')
   })
 
   afterEach(async () => {
@@ -89,7 +82,6 @@ describe('Parcels route test', () => {
   })
 
   afterAll(() => {
-    jest.unmock('../../server/services/parcels-service')
     jest.unmock('../../server/services/actions-service')
   })
 })
