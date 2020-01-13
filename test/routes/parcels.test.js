@@ -1,9 +1,17 @@
 let parcelsService
 const parcel = { ref: 'SD75492628' }
+
+let actionsService
+const action = { id: 'FG1', description: 'Fencing' }
+
 function createMocks () {
   jest.mock('../../server/services/parcels-service')
   parcelsService = require('../../server/services/parcels-service')
   parcelsService.getParcels = () => { return Promise.resolve([parcel]) }
+
+  jest.mock('../../server/services/actions-service')
+  actionsService = require('../../server/services/actions-service')
+  actionsService.getActions = () => { return Promise.resolve([action]) }
 }
 
 function extractSessionCookie (response) {
@@ -57,10 +65,9 @@ describe('Parcels route test', () => {
     expect(postResponse.statusCode).toBe(302)
 
     const getResponse = await server.inject(getRedirectOptions(postResponse))
-    // console.log(getResponse)
     expect(getResponse.statusCode).toBe(200)
-    // // verify service response is rendered on the page
-    // expect(getResponse.payload).toContain(parcel.ref)
+    // verify service response is rendered on the page
+    expect(getResponse.payload).toContain(parcel.ref)
   })
 
   test('POST /parcels route returns error message in body if no parcel chosen', async () => {
