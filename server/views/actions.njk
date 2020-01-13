@@ -2,7 +2,15 @@
 
 {% block content %}
   <div class="govuk-body">
- <h1> Actions </h1>
- <h2> {{model.message }}</h2>
+    {% from "govuk/components/radios/macro.njk" import govukRadios %}
+    {% from "govuk/components/button/macro.njk" import govukButton %}
+    {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
+
+    <form method="POST" action="/actions">
+      {{ govukRadios(model) }}
+      {{ govukButton({ text: "Continue" }) }}
+    </form>
+
   </div>
 {% endblock %}
+
