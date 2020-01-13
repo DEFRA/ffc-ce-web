@@ -27,18 +27,19 @@ describe('parcelService', () => {
   })
 
   test('get parcels return JSON', async () => {
-    const mockParcels = [{ ref: '1234' }]
+    const mockParcels = { parcels: [{ ref: '1234' }] }
     payload = { toString: () => JSON.stringify(mockParcels) }
     const result = await parcelsService.getParcels()
     expect(result).toBeDefined()
     expect(result.length).toEqual(1)
-    expect(result[0]).toEqual(mockParcels[0])
+    expect(result[0]).toEqual(mockParcels.parcels[0])
   })
 
-  test('get parcels returns undefined for empty payload', async () => {
+  test('get parcels returns empty array for empty payload', async () => {
     payload = undefined
     const result = await parcelsService.getParcels()
-    expect(result).toBeUndefined()
+    expect(result).toBeDefined()
+    expect(result.length).toEqual(0)
   })
 
   afterAll(async () => {
