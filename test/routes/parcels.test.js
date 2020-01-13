@@ -33,7 +33,7 @@ describe('Parcels route test', () => {
     server = await createServer()
     await server.initialize()
   })
-  test('GET / route returns 200', async () => {
+  test('GET /parcels route returns 200', async () => {
     const options = {
       method: 'GET',
       url: '/parcels'
