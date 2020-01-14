@@ -12,6 +12,7 @@ function createMocks () {
 }
 
 describe('Action Inputs route test', () => {
+  const expectedErrorMessage = 'You must enter a number greater than zero with, at most, 2 decimal places'
   let createServer
   let server
 
@@ -38,7 +39,7 @@ describe('Action Inputs route test', () => {
   })
 
   test('POST /action-inputs route redirects to GET /calculation-result if calculation requested', async () => {
-    const actionInput = '54.5'
+    const actionInput = 54.5
     const postOptions = {
       method: 'POST',
       url: '/action-inputs',
@@ -63,7 +64,27 @@ describe('Action Inputs route test', () => {
 
     const postResponse = await server.inject(postOptions)
     expect(postResponse.statusCode).toBe(200)
-    expect(postResponse.payload).toContain('You must enter a value')
+    expect(postResponse.payload).toContain(expectedErrorMessage)
+    // I would expect setActionInput to not be called but based on tracing the POST handler
+    // runs before the options.validate.failAction.
+    // In the end it doesn't matter for the code here but it's not intuitive and warrants
+    // further investigation
+    expect(session.setActionInput.mock.calls.length).toBe(1)
+  })
+
+  test('POST /action-inputs route returns error message in body if not a number entered', async () => {
+    const actionInput = 'not a number'
+    const postOptions = {
+      method: 'POST',
+      url: '/action-inputs',
+      payload: {
+        actionInput
+      }
+    }
+
+    const postResponse = await server.inject(postOptions)
+    expect(postResponse.statusCode).toBe(200)
+    expect(postResponse.payload).toContain(expectedErrorMessage)
     // I would expect setActionInput to not be called but based on tracing the POST handler
     // runs before the options.validate.failAction.
     // In the end it doesn't matter for the code here but it's not intuitive and warrants
