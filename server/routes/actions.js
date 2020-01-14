@@ -1,6 +1,7 @@
 const actionsService = require('../services/actions-service')
 const actionsModel = require('../models/actions-model')
 const actionPostSchema = require('../schemas/actions-post-schema')
+const { getParcelRef } = require('../session')
 const cacheKey = 'actionId'
 
 module.exports = [
@@ -8,7 +9,7 @@ module.exports = [
     method: 'GET',
     path: '/actions',
     handler: async (request, h) => {
-      const parcelRef = request.yar.get('parcelRef')
+      const parcelRef = getParcelRef(request)
       const actions = await actionsService.getActions()
       const model = actionsModel(actions, parcelRef)
       return h.view('actions', { model })
@@ -26,7 +27,7 @@ module.exports = [
         payload: actionPostSchema,
         failAction: async (request, h) => {
           const actions = await actionsService.getActions()
-          const parcelRef = request.yar.get('parcelRef')
+          const parcelRef = getParcelRef(request)
           const model = actionsModel(actions, parcelRef, 'You must choose an action')
           return h.view('actions', { model }).takeover()
         }
