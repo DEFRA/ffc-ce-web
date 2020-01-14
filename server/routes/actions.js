@@ -1,8 +1,7 @@
 const actionsService = require('../services/actions-service')
 const actionsModel = require('../models/actions-model')
 const actionPostSchema = require('../schemas/actions-post-schema')
-const { getParcelRef } = require('../session')
-const cacheKey = 'actionId'
+const { getParcelRef, setActionId } = require('../session')
 
 module.exports = [
   {
@@ -19,7 +18,7 @@ module.exports = [
     method: 'POST',
     path: '/actions',
     handler: function (request, h) {
-      request.yar.set(cacheKey, request.payload.actionId)
+      setActionId(request.payload.actionId)
       return h.redirect('/action-inputs')
     },
     options: {

@@ -1,24 +1,18 @@
 let actionsService
 const action = { id: 'FG1', description: 'Fencing' }
+const parcelRef = 'PR12345'
+
+let session
 
 function createMocks () {
   jest.mock('../../server/services/actions-service')
   actionsService = require('../../server/services/actions-service')
   actionsService.getActions = () => { return Promise.resolve([action]) }
-}
 
-function extractSessionCookie (response) {
-  const setCookie = response.headers['set-cookie']
-  return (setCookie && setCookie[0]) ? setCookie[0].split(';')[0] : ''
-}
-
-function getRedirectOptions (response) {
-  const cookie = extractSessionCookie(response)
-  return {
-    method: 'GET',
-    headers: { cookie },
-    url: response.headers.location
-  }
+  jest.mock('../../server/session')
+  session = require('../../server/session')
+  session.getParcelRef = (request) => parcelRef
+  session.setActionId = jest.fn((request, actionId) => actionId)
 }
 
 describe('Actions route test', () => {
@@ -39,9 +33,9 @@ describe('Actions route test', () => {
       method: 'GET',
       url: '/actions'
     }
-
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+    expect(response.payload).toContain(parcelRef)
     expect(response.payload).toContain(action.id)
   })
 
@@ -58,24 +52,25 @@ describe('Actions route test', () => {
     expect(postResponse.statusCode).toBe(302)
     expect(postResponse.headers.location).toBe('/action-inputs')
 
-    const getResponse = await server.inject(getRedirectOptions(postResponse))
-    expect(getResponse.statusCode).toBe(200)
-    // verify service response is rendered on the page
-    expect(getResponse.payload).toContain(action.id)
+    expect(session.setActionId.mock.calls.length).toBe(1)
+    expect(session.setActionId.mock.calls[0][0]).toBe(action.id)
   })
 
   test('POST /actions route returns error message in body if no action chosen', async () => {
     const postOptions = {
       method: 'POST',
       url: '/actions',
-      payload: {
-        actionId: undefined
-      }
+      payload: {}
     }
 
     const postResponse = await server.inject(postOptions)
     expect(postResponse.statusCode).toBe(200)
     expect(postResponse.payload).toContain('You must choose an action')
+    // I would expect setActionId to not be called but based on tracing the POST handler
+    // runs before the options.validate.failAction.
+    // In the end it doesn't matter for the code here but it's not intuitive and warrants
+    // further investigation
+    expect(session.setActionId.mock.calls.length).toBe(1)
   })
 
   afterEach(async () => {
@@ -84,5 +79,6 @@ describe('Actions route test', () => {
 
   afterAll(() => {
     jest.unmock('../../server/services/actions-service')
+    jest.unmock('../../server/session')
   })
 })
