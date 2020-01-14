@@ -54,6 +54,23 @@ describe('Action Inputs route test', () => {
     expect(session.setActionInput.mock.calls[0][1]).toBe(actionInput)
   })
 
+  test('POST /action-inputs route returns error message in body if no input entered', async () => {
+    const postOptions = {
+      method: 'POST',
+      url: '/action-inputs',
+      payload: {}
+    }
+
+    const postResponse = await server.inject(postOptions)
+    expect(postResponse.statusCode).toBe(200)
+    expect(postResponse.payload).toContain('You must enter a value')
+    // I would expect setActionInput to not be called but based on tracing the POST handler
+    // runs before the options.validate.failAction.
+    // In the end it doesn't matter for the code here but it's not intuitive and warrants
+    // further investigation
+    expect(session.setActionInput.mock.calls.length).toBe(1)
+  })
+
   afterEach(async () => {
     await server.stop()
   })

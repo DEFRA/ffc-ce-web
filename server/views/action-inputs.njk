@@ -1,24 +1,17 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
-
 {% block content %}
   <div class="govuk-body">
+    {% from "govuk/components/button/macro.njk" import govukButton %}
+    {% from "govuk/components/input/macro.njk" import govukInput %}
+    {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
+
     <h1> Action Inputs </h1>
     <h2> Parcel: {{ model.parcelRef }} </h2>
     <h2> Action: {{ model.actionId }} </h2>
-    <form method="get" action="/calculation-result">
-      {{ govukInput({
-        label: {
-          text: "Proposed fence length"
-        },
-        id: "actionInput",
-        name: "actionInput"
-      }) }}
-      {{ govukButton({
-        text: "Calculate"
-      }) }}
+    <form method="POST" action="/action-inputs">
+      {{ govukInput(model) }}
+      {{ govukButton({ text: "Continue" }) }}
     </form>
   </div>
 {% endblock %}
