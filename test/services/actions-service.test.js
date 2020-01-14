@@ -2,12 +2,13 @@ let actionsService
 jest.mock('@hapi/wreck')
 
 let payload
+const parcelRef = 'AB12345678'
 
 function stubWreckCall () {
   const wreck = require('@hapi/wreck')
   wreck.defaults = () => {
     return {
-      get: () => {
+      get: (ref) => {
         return Promise.resolve({ payload })
       }
     }
@@ -30,7 +31,7 @@ describe('actionService', () => {
   test('get actions return JSON', async () => {
     const mockActions = { actions: [{ id: '1', description: 'an action' }] }
     payload = mockActions
-    const result = await actionsService.getActions()
+    const result = await actionsService.getActions(parcelRef)
     expect(result).toBeDefined()
     expect(result.length).toEqual(1)
     expect(result[0]).toEqual(mockActions.actions[0])
@@ -38,7 +39,7 @@ describe('actionService', () => {
 
   test('get actions returns empty array for empty payload', async () => {
     payload = undefined
-    const result = await actionsService.getActions()
+    const result = await actionsService.getActions(parcelRef)
     expect(result).toBeDefined()
     expect(result.length).toEqual(0)
   })
