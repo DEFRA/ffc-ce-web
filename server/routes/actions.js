@@ -18,7 +18,7 @@ module.exports = [
     method: 'POST',
     path: '/actions',
     handler: function (request, h) {
-      setActionId(request.payload.actionId)
+      setActionId(request, request.payload.actionId)
       return h.redirect('/action-inputs')
     },
     options: {

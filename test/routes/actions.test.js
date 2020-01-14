@@ -53,7 +53,7 @@ describe('Actions route test', () => {
     expect(postResponse.headers.location).toBe('/action-inputs')
 
     expect(session.setActionId.mock.calls.length).toBe(1)
-    expect(session.setActionId.mock.calls[0][0]).toBe(action.id)
+    expect(session.setActionId.mock.calls[0][1]).toBe(action.id)
   })
 
   test('POST /actions route returns error message in body if no action chosen', async () => {
