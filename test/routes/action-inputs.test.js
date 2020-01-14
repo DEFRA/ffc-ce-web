@@ -52,7 +52,7 @@ describe('Action Inputs route test', () => {
     expect(postResponse.statusCode).toBe(302)
     expect(postResponse.headers.location).toBe('/calculation-result')
     expect(session.setActionInput.mock.calls.length).toBe(1)
-    expect(session.setActionInput.mock.calls[0][1]).toBe(actionInput)
+    expect(session.setActionInput.mock.calls[0][1]).toBe(actionInput.toString())
   })
 
   test('POST /action-inputs route returns error message in body if no input entered', async () => {

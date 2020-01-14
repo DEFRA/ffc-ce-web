@@ -16,7 +16,7 @@ module.exports = [
     method: 'POST',
     path: '/action-inputs',
     handler: function (request, h) {
-      setActionInput(request, request.payload.actionInput)
+      setActionInput(request, request.payload.actionInput.toString())
       return h.redirect('/calculation-result')
     },
     options: {
