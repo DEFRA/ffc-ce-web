@@ -1,13 +1,13 @@
+const { getParcelRef, getActionId, setActionInput } = require('../session')
+
 module.exports = [
   {
     method: 'GET',
     path: '/action-inputs',
     handler: async (request, h) => {
-      const parcelRef = request.yar.get('parcelRef')
-      const actionId = request.yar.get('actionId')
       const model = {
-        parcelRef,
-        actionId
+        parcelRef: getParcelRef(request),
+        actionId: getActionId(request)
       }
       return h.view('action-inputs', { model })
     }
@@ -16,6 +16,7 @@ module.exports = [
     method: 'POST',
     path: '/action-inputs',
     handler: function (request, h) {
+      setActionInput(request, request.payload.actionInput)
       return h.redirect('/calculation-result')
     }
   }
