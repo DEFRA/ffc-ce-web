@@ -4,7 +4,7 @@ const mockConfig = {
 }
 const wreck = require('@hapi/wreck')
 jest.mock('@hapi/wreck')
-wreck.get.mockImplementation(() => Promise.resolve(() => ({ payload: {} })))
+wreck.post.mockImplementation(() => Promise.resolve(() => ({ payload: {} })))
 wreck.defaults.mockImplementation(() => wreck)
 jest.mock('../../server/config', () => mockConfig)
 
@@ -27,7 +27,7 @@ describe('payments service', () => {
 
     test('makes a GET request to payment-calculations endpoint', async () => {
       await paymentsService.calculatePayment(getSampleRequestPayload())
-      expect(wreck.get).toHaveBeenCalledWith(
+      expect(wreck.post).toHaveBeenCalledWith(
         mockConfig.paymentCalculationUrl,
         expect.any(Object)
       )
@@ -35,7 +35,7 @@ describe('payments service', () => {
 
     test('requests response as JSON', async () => {
       await paymentsService.calculatePayment(getSampleRequestPayload())
-      expect(wreck.get).toHaveBeenCalledWith(
+      expect(wreck.post).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({ json: true })
       )
@@ -44,7 +44,7 @@ describe('payments service', () => {
     test('passes parcel ref in payload', async () => {
       const parcelRef = 'abc-123'
       await paymentsService.calculatePayment(parcelRef, 'a1', 0)
-      expect(wreck.get).toHaveBeenCalledWith(
+      expect(wreck.post).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
           payload: expect.objectContaining({
@@ -57,7 +57,7 @@ describe('payments service', () => {
     test('passes action in payload', async () => {
       const id = 'action-1'
       await paymentsService.calculatePayment('ddd-111', id, 0)
-      expect(wreck.get).toHaveBeenCalledWith(
+      expect(wreck.post).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
           payload: expect.objectContaining({
@@ -72,7 +72,7 @@ describe('payments service', () => {
     test('passes quantity in payload', async () => {
       const quantity = 99
       await paymentsService.calculatePayment('ddd-111', 'a1', quantity)
-      expect(wreck.get).toHaveBeenCalledWith(
+      expect(wreck.post).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
           payload: expect.objectContaining({
@@ -86,7 +86,7 @@ describe('payments service', () => {
 
     test('returns server payload', async () => {
       const payload = { eligible: true, value: 99 }
-      wreck.get.mockImplementation(() => ({ payload }))
+      wreck.post.mockImplementation(() => ({ payload }))
       const result = await paymentsService.calculatePayment(getSampleRequestPayload)
       expect(result).toEqual(payload)
     })

@@ -14,7 +14,7 @@ function buildPayload (parcelRef, id, quantity) {
 }
 
 async function calculatePayment (parcelRef, actionId, quantity) {
-  const result = await wreck.get(
+  const result = await wreck.post(
     config.paymentCalculationUrl,
     {
       json: true,
