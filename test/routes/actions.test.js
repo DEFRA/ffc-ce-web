@@ -70,11 +70,12 @@ describe('Actions route test', () => {
     // runs before the options.validate.failAction.
     // In the end it doesn't matter for the code here but it's not intuitive and warrants
     // further investigation
-    expect(session.setActionId.mock.calls.length).toBe(1)
+    expect(session.setActionId.mock.calls.length).toBe(0)
   })
 
   afterEach(async () => {
     await server.stop()
+    jest.clearAllMocks()
   })
 
   afterAll(() => {
