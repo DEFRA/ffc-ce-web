@@ -1,8 +1,8 @@
 {% extends 'layout.njk' %}
 
 {% block content %}
-  <div class="govuk-body>
-    <h2>Calculation Result</h2>
+  <div class="govuk-body">
+    <h1>Calculation Result</h1>
     {% if model.entitled %}
       We calculate that you would be entitled to a payment of £{{model.payment}} for carrying out that action.
     {% else %}

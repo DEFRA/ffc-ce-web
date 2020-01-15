@@ -7,7 +7,10 @@ module.exports = [
     method: 'GET',
     path: '/calculation-result',
     handler: async (request, h) => {
-      const payment = await paymentService.calculatePayment(getParcelRef(), getActionId(), getActionInput())
+      const parcelRef = getParcelRef(request)
+      const actionId = getActionId(request)
+      const actionInput = getActionInput(request)
+      const payment = await paymentService.calculatePayment(parcelRef, actionId, actionInput)
       const model = paymentsModel(payment.eligible, payment.value)
       return h.view('calculation-result', { model })
     }

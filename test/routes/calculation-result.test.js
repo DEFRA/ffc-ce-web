@@ -22,6 +22,39 @@ describe('Payments route test', () => {
     expect(response.statusCode).toBe(200)
   })
 
+  test('provides request to getParcelRef', async () => {
+    await server.inject(getOptions())
+    expect(session.getParcelRef).toHaveBeenCalledWith(
+      expect.objectContaining({
+        yar: expect.objectContaining({
+          get: expect.any(Function)
+        })
+      })
+    )
+  })
+
+  test('provides request to getActionId', async () => {
+    await server.inject(getOptions())
+    expect(session.getActionId).toHaveBeenCalledWith(
+      expect.objectContaining({
+        yar: expect.objectContaining({
+          get: expect.any(Function)
+        })
+      })
+    )
+  })
+
+  test('provides request to getActionInput', async () => {
+    await server.inject(getOptions())
+    expect(session.getActionInput).toHaveBeenCalledWith(
+      expect.objectContaining({
+        yar: expect.objectContaining({
+          get: expect.any(Function)
+        })
+      })
+    )
+  })
+
   test('Calls payment service with provided parcel ref, action id and action input', async () => {
     const parcelRef = 'abc-123'
     const actionId = 'commando-roll'
