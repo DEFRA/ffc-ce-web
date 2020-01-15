@@ -9,7 +9,7 @@ module.exports = [
     path: '/actions',
     handler: async (request, h) => {
       const parcelRef = getParcelRef(request)
-      const actions = await actionsService.getActions()
+      const actions = await actionsService.getActions(parcelRef)
       const model = actionsModel(actions, parcelRef)
       return h.view('actions', { model })
     }
