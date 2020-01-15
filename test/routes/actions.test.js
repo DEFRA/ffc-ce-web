@@ -66,10 +66,6 @@ describe('Actions route test', () => {
     const postResponse = await server.inject(postOptions)
     expect(postResponse.statusCode).toBe(200)
     expect(postResponse.payload).toContain('You must choose an action')
-    // I would expect setActionId to not be called but based on tracing the POST handler
-    // runs before the options.validate.failAction.
-    // In the end it doesn't matter for the code here but it's not intuitive and warrants
-    // further investigation
     expect(session.setActionId.mock.calls.length).toBe(0)
   })
 
