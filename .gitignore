@@ -9,3 +9,4 @@ lcov.info
 auth
 test-output
 server/public/build
+*.swp
