@@ -43,7 +43,7 @@ describe('payments service', () => {
 
     test('passes parcel ref in payload', async () => {
       const parcelRef = 'abc-123'
-      await paymentsService.calculatePayment({ parcelRef })
+      await paymentsService.calculatePayment(parcelRef, 'a1', 0)
       expect(wreck.get).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
@@ -54,33 +54,37 @@ describe('payments service', () => {
       )
     })
 
-    test('passes quantity in payload', async () => {
-      const quantity = 99
-      await paymentsService.calculatePayment({ quantity })
+    test('passes action in payload', async () => {
+      const id = 'action-1'
+      await paymentsService.calculatePayment('ddd-111', id, 0)
       expect(wreck.get).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
           payload: expect.objectContaining({
-            quantity
+            actions: expect.arrayContaining([
+              expect.objectContaining({ action: { id } })
+            ])
           })
         })
       )
     })
 
-    test('doesn\'t pass other arbitrary properties in payload', async () => {
-      const anyOldRubbish = { name: 'Dusty Bin', tag: '80s icon', age: 48 }
-      await paymentsService.calculatePayment({ anyOldRubbish })
-      expect(wreck.get).not.toHaveBeenCalledWith(
+    test('passes quantity in payload', async () => {
+      const quantity = 99
+      await paymentsService.calculatePayment('ddd-111', 'a1', quantity)
+      expect(wreck.get).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
           payload: expect.objectContaining({
-            anyOldRubbish
+            actions: expect.arrayContaining([
+              expect.objectContaining({ options: { quantity } })
+            ])
           })
         })
       )
     })
 
-    test('returns payload', async () => {
+    test('returns server payload', async () => {
       const payload = { eligible: true, value: 99 }
       wreck.get.mockImplementation(() => ({ payload }))
       const result = await paymentsService.calculatePayment(getSampleRequestPayload)
