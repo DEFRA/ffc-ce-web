@@ -20,11 +20,12 @@
   },
   "author": "Defra DDTS",
   "contributors": [
-    "John Watson john.watson2@rpa.gov.uk",
-    "Mark Harrop mark.harrop@defra.gov.uk",
-    "Matthew Collins matthew.collins@defra.gov.uk",
-    "David Bingham david.bingham@defra.gov.uk",
-    "Paul Andrews paul.andrews@defra.gov.uk"
+    "John Watson <john.watson2@rpa.gov.uk>",
+    "Mark Harrop <mark.harrop@defra.gov.uk>",
+    "Matthew Collins <matthew.collins@defra.gov.uk>",
+    "David Bingham <david.bingham@defra.gov.uk>",
+    "Paul Andrews <paul.andrews@defra.gov.uk>",
+    "Phil Benson <phil.benson@defra.gov.uk>"
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
