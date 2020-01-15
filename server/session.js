@@ -22,8 +22,8 @@ function getActionInput (request) {
   return request.yar.get(actionInputKey)
 }
 
-function setActionInput (request, actionInputKey) {
-  return request.yar.set(actionInputKey, actionInputKey)
+function setActionInput (request, actionInput) {
+  return request.yar.set(actionInputKey, actionInput)
 }
 
 module.exports = {

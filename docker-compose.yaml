@@ -8,7 +8,7 @@ services:
     environment:
       PAYMENT_URL: http://ffc-ce-payment-orchestrator:3002
       COOKIE_PASSWORD: aPasswordNotUsedAnywhereOnlyLocallyWhenTesting
-      PAYMENT_CALCULATION_URL: http://ffc-ce-payment-orchestrator:3002/payment-calculations
+      PAYMENT_CALCULATION_URL: http://ffc-ce-payment-orchestrator:3002/payment-calculation
     volumes:
       - node_modules:/usr/src/app/node_modules
       - .:/usr/src/app

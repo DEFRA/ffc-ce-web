@@ -87,14 +87,13 @@ describe('payments service', () => {
     test('returns server payload', async () => {
       const payload = { eligible: true, value: 99 }
       wreck.post.mockImplementation(() => ({ payload }))
-      const result = await paymentsService.calculatePayment(getSampleRequestPayload)
+      const result = await paymentsService.calculatePayment(getSampleRequestPayload())
       expect(result).toEqual(payload)
     })
 
-    const getSampleRequestPayload = (payload = {}) => ({
+    const getSampleRequestPayload = () => ({
       parcelRef: '',
-      quantity: 0,
-      ...payload
+      quantity: 0
     })
   })
 })
