@@ -33,7 +33,7 @@ def getExtraCommands(pr, containerTag, ingressServer) {
       /ingress.alb.tags="$albTags"/,
       /ingress.alb.arn="$albArn"/,
       /ingress.alb.securityGroups="$albSecurityGroups"/,
-      /ingress.endpoint="ffc-ce-web-$containerTag"/,
+      /ingress.endPoint="ffc-ce-web-$containerTag"/,
       /ingress.server="$ingressServer"/
     ].join(',')
 
@@ -50,7 +50,7 @@ node {
     stage('Set PR, and containerTag variables') {
       (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName)
       defraUtils.setGithubStatusPending()
-    }    
+    }
     stage('Helm lint') {
       defraUtils.lintHelm(imageName)
     }
@@ -77,7 +77,7 @@ node {
           defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, getExtraCommands(pr, containerTag, ingressServer))
           echo "Build available for review at https://ffc-ce-web-$containerTag.$ingressServer"
       }
-      
+
     }
     if (pr == '') {
       stage('Publish chart') {
