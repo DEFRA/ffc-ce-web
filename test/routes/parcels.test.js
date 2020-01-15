@@ -1,31 +1,16 @@
 let parcelsService
 const parcel = { ref: 'SD75492628' }
 
-let actionsService
-const action = { id: 'FG1', description: 'Fencing' }
+let session
 
 function createMocks () {
   jest.mock('../../server/services/parcels-service')
   parcelsService = require('../../server/services/parcels-service')
   parcelsService.getParcels = () => { return Promise.resolve([parcel]) }
 
-  jest.mock('../../server/services/actions-service')
-  actionsService = require('../../server/services/actions-service')
-  actionsService.getActions = () => { return Promise.resolve([action]) }
-}
-
-function extractSessionCookie (response) {
-  const setCookie = response.headers['set-cookie']
-  return (setCookie && setCookie[0]) ? setCookie[0].split(';')[0] : ''
-}
-
-function getRedirectOptions (response) {
-  const cookie = extractSessionCookie(response)
-  return {
-    method: 'GET',
-    headers: { cookie },
-    url: response.headers.location
-  }
+  jest.mock('../../server/session')
+  session = require('../../server/session')
+  session.setParcelRef = jest.fn((request, parcelRef) => parcelRef)
 }
 
 describe('Parcels route test', () => {
@@ -41,6 +26,7 @@ describe('Parcels route test', () => {
     server = await createServer()
     await server.initialize()
   })
+
   test('GET /parcels route returns 200', async () => {
     const options = {
       method: 'GET',
@@ -63,11 +49,10 @@ describe('Parcels route test', () => {
 
     const postResponse = await server.inject(postOptions)
     expect(postResponse.statusCode).toBe(302)
+    expect(postResponse.headers.location).toBe('/actions')
 
-    const getResponse = await server.inject(getRedirectOptions(postResponse))
-    expect(getResponse.statusCode).toBe(200)
-    // verify service response is rendered on the page
-    expect(getResponse.payload).toContain(parcel.ref)
+    expect(session.setParcelRef.mock.calls.length).toBe(1)
+    expect(session.setParcelRef.mock.calls[0][1]).toBe(parcel.ref)
   })
 
   test('POST /parcels route returns error message in body if no parcel chosen', async () => {
@@ -90,6 +75,6 @@ describe('Parcels route test', () => {
 
   afterAll(() => {
     jest.unmock('../../server/services/parcels-service')
-    jest.unmock('../../server/services/actions-service')
+    jest.unmock('../../server/session')
   })
 })

@@ -1,7 +1,7 @@
 const parcelService = require('../services/parcels-service')
 const parcelModel = require('../models/parcels-model')
 const parcelPostSchema = require('../schemas/parcels-post-schema')
-const cacheKey = 'parcelRef'
+const { setParcelRef } = require('../session')
 
 module.exports = [
   {
@@ -17,7 +17,7 @@ module.exports = [
     method: 'POST',
     path: '/parcels',
     handler: function (request, h) {
-      request.yar.set(cacheKey, request.payload.parcelRef)
+      setParcelRef(request, request.payload.parcelRef)
       return h.redirect('/actions')
     },
     options: {
