@@ -47,7 +47,7 @@ describe('Payments route test', () => {
     }
   })
 
-  test('Displays payment amount in response', async () => {
+  test('Displays not entitled message in response when paymentService deems a parcel ineligible', async () => {
     paymentService.calculatePayment.mockImplementation(() => ({ eligible: false }))
     const response = await server.inject(getOptions())
     expect(response.payload).toContain('You are not entitled to carry out that Action on that Parcel.')
