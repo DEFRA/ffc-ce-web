@@ -7,10 +7,18 @@
     {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
     {% from "govuk/components/input/macro.njk" import govukInput %}
 
+    <h1 class="govuk-heading-xl">
+      Select a land parcel
+    </h1>
+
+    <span class="govuk-hint">
+      Choose which parcel of land the scheme will apply to. Use the search box to filter the list below.
+    </span>
+
     <form method="POST" action="/parcels">
       {{ govukInput({
         label: {
-          text: "Filter parcels"
+          text: "Search"
         },
         classes: "govuk-input--width-10",
         id: "parcel-ref-filter",
