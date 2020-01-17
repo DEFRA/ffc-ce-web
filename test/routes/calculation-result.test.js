@@ -3,17 +3,17 @@ const createServer = require('../../server/createServer')
 const session = require('../../server/session')
 
 jest.mock('../../server/services/payments-service')
-paymentService.calculatePayment.mockImplementation(() => ({ eligible: true, value: 1 }))
 jest.mock('../../server/session')
-session.getParcelRef.mockImplementation(() => 'ddd-111')
-session.getActionId.mockImplementation(() => 'action-1')
-session.getActionInput.mockImplementation(() => 43)
 
 describe('Payments route test', () => {
   let server
 
   beforeEach(async () => {
     jest.clearAllMocks()
+    paymentService.calculatePayment.mockImplementation(() => ({ eligible: true, value: 1 }))
+    session.getParcelRef.mockImplementation(() => 'ddd-111')
+    session.getActionId.mockImplementation(() => 'action-1')
+    session.getActionInput.mockImplementation(() => 1)
     server = await createServer()
   })
 
@@ -80,10 +80,61 @@ describe('Payments route test', () => {
     }
   })
 
+  test('Displays parcel ref in response for eligible application', async () => {
+    const testCases = ['AA1111', 'BB2222', 'CC3333']
+    for (const testCase of testCases) {
+      session.getParcelRef.mockImplementation(() => testCase)
+      const response = await server.inject(getOptions())
+      expect(response.payload).toContain(testCase)
+    }
+  })
+
+  test('Displays action id in response for eligible application', async () => {
+    const testCases = ['aaa111', 'bbb222', 'ccc333']
+    for (const testCase of testCases) {
+      session.getActionId.mockImplementation(() => testCase)
+      const response = await server.inject(getOptions())
+      expect(response.payload).toContain(testCase)
+    }
+  })
+
+  test('Displays what happens next text for eligible applicaiton', async () => {
+    const response = await server.inject(getOptions())
+    expect(response.payload).toContain('What happens next')
+  })
+
   test('Displays not entitled message in response when paymentService deems a parcel ineligible', async () => {
     paymentService.calculatePayment.mockImplementation(() => ({ eligible: false }))
     const response = await server.inject(getOptions())
-    expect(response.payload).toContain('You are not entitled to carry out that Action on that Parcel.')
+    expect(response.payload).toContain('You are not entitled to a payment')
+  })
+
+  test('Displays parcel ref in response for ineligible application', async () => {
+    const testCases = ['AA1111', 'BB2222', 'CC3333']
+    paymentService.calculatePayment.mockImplementation(() => ({ eligible: false }))
+
+    for (const testCase of testCases) {
+      session.getParcelRef.mockImplementation(() => testCase)
+      const response = await server.inject(getOptions())
+      expect(response.payload).toContain(testCase)
+    }
+  })
+
+  test('Displays action id in response for ineligible application', async () => {
+    const testCases = ['aaa111', 'bbb222', 'ccc333']
+    paymentService.calculatePayment.mockImplementation(() => ({ eligible: false }))
+
+    for (const testCase of testCases) {
+      session.getActionId.mockImplementation(() => testCase)
+      const response = await server.inject(getOptions())
+      expect(response.payload).toContain(testCase)
+    }
+  })
+
+  test('Doesn\'t display what happens next text for ineligible applicaiton', async () => {
+    paymentService.calculatePayment.mockImplementation(() => ({ eligible: false }))
+    const response = await server.inject(getOptions())
+    expect(response.payload).not.toContain('What happens next')
   })
 
   afterEach(async () => {

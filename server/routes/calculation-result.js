@@ -11,7 +11,7 @@ module.exports = [
       const actionId = getActionId(request)
       const actionInput = getActionInput(request)
       const payment = await paymentService.calculatePayment(parcelRef, actionId, actionInput)
-      const model = paymentsModel(payment.eligible, payment.value)
+      const model = paymentsModel(payment.eligible, parcelRef, actionId, payment.value)
       return h.view('calculation-result', { model })
     }
   }

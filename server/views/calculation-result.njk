@@ -1,12 +1,20 @@
 {% extends 'layout.njk' %}
 
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
 {% block content %}
-  <div class="govuk-body">
-    <h1>Calculation Result</h1>
-    {% if model.entitled %}
-      We calculate that you would be entitled to a payment of £{{model.payment}} for carrying out that action.
-    {% else %}
-      You are not entitled to carry out that Action on that Parcel.
-    {% endif %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukPanel(model.panel) }}
+      {% if model.eligible %}
+      <h2 class="govuk-heading-m">What happens next</h2>
+
+      <p class="govuk-body">
+        You will need to make a formal application
+      </p>
+      {% endif %}
+    </div>
   </div>
 {% endblock %}
