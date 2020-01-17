@@ -5,11 +5,26 @@
     {% from "govuk/components/radios/macro.njk" import govukRadios %}
     {% from "govuk/components/button/macro.njk" import govukButton %}
     {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
+    {% from "govuk/components/input/macro.njk" import govukInput %}
 
     <form method="POST" action="/parcels">
+      {{ govukInput({
+        label: {
+          text: "Filter parcels"
+        },
+        classes: "govuk-input--width-10",
+        id: "parcel-ref-filter",
+        name: "parcel-ref-filter"
+      }) }}
+
       {{ govukRadios(model) }}
+
       {{ govukButton({ text: "Continue" }) }}
     </form>
 
   </div>
+{% endblock %}
+
+{% block bodyEnd %}
+  <script src="{{ assetPath }}/javascript/parcels.js"></script>
 {% endblock %}
