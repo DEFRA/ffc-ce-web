@@ -1,4 +1,4 @@
-function actionsModel (parcelRef, actionId, error) {
+function actionsInputsModel (parcelRef, actionId, error) {
   const model = {
     hint: {
       text: `Enter the proposed fence length to apply action ${actionId} to parcel ${parcelRef}`
@@ -19,4 +19,4 @@ function actionsModel (parcelRef, actionId, error) {
   return model
 }
 
-module.exports = actionsModel
+module.exports = actionsInputsModel
