@@ -6,9 +6,6 @@
     {% from "govuk/components/input/macro.njk" import govukInput %}
     {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 
-    <h1> Action Inputs </h1>
-    <h2> Parcel: {{ model.parcelRef }} </h2>
-    <h2> Action: {{ model.actionId }} </h2>
     <form method="POST" action="/action-inputs">
       {{ govukInput(model) }}
       {{ govukButton({ text: "Continue" }) }}
