@@ -17,4 +17,9 @@ describe('actionsModel', () => {
     expect(model.errorMessage.text).toEqual(errorMessage)
     expect(model.hint.text).toEqual(`Select an action to apply to parcel ${parcelRef}`)
   })
+
+  test('actions model should omit errorMessage if no error is provided', () => {
+    const model = actionModel([{ id: 'id1', description: 'desc' }], 'ref1')
+    expect(model.errorMessage).toBeUndefined()
+  })
 })

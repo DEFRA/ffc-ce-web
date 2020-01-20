@@ -12,4 +12,9 @@ describe('parcelModel', () => {
     expect(model.items[0].text).toEqual(parcel.ref)
     expect(model.errorMessage.text).toEqual(errorMessage)
   })
+
+  test('parcels model should omit errorMessage if no error is provided', () => {
+    const model = parcelModel([{ ref: 'ref1' }])
+    expect(model.errorMessage).toBeUndefined()
+  })
 })

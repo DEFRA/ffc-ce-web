@@ -4,7 +4,7 @@ function actionsModel (actions, parcelRef, errorMessage) {
   const items = actions.map(action => {
     return { value: action.id, text: `${action.id}: ${action.description}` }
   })
-  return {
+  const model = {
     idPrefix: actionId,
     name: actionId,
     fieldset: {
@@ -17,11 +17,14 @@ function actionsModel (actions, parcelRef, errorMessage) {
     hint: {
       text: `Select an action to apply to parcel ${parcelRef}`
     },
-    items,
-    errorMessage: {
+    items
+  }
+  if (errorMessage) {
+    model.errorMessage = {
       text: errorMessage
     }
   }
+  return model
 }
 
 module.exports = actionsModel
