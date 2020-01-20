@@ -98,15 +98,19 @@ describe('Payments route test', () => {
     }
   })
 
-  test('Displays what happens next text for eligible applicaiton', async () => {
-    const response = await server.inject(getOptions())
-    expect(response.payload).toContain('What happens next')
+  test('Displays result text', async () => {
+    const testCases = [true, false]
+    for (const testCase of testCases) {
+      paymentService.calculatePayment.mockImplementation(() => ({ eligible: testCase, value: 1 }))
+      const response = await server.inject(getOptions())
+      expect(response.payload).toContain('Result')
+    }
   })
 
   test('Displays not entitled message in response when paymentService deems a parcel ineligible', async () => {
     paymentService.calculatePayment.mockImplementation(() => ({ eligible: false }))
     const response = await server.inject(getOptions())
-    expect(response.payload).toContain('You are not entitled to a payment')
+    expect(response.payload).toContain('You\'re not eligible for a payment')
   })
 
   test('Displays parcel ref in response for ineligible application', async () => {
@@ -129,12 +133,6 @@ describe('Payments route test', () => {
       const response = await server.inject(getOptions())
       expect(response.payload).toContain(testCase)
     }
-  })
-
-  test('Doesn\'t display what happens next text for ineligible applicaiton', async () => {
-    paymentService.calculatePayment.mockImplementation(() => ({ eligible: false }))
-    const response = await server.inject(getOptions())
-    expect(response.payload).not.toContain('What happens next')
   })
 
   afterEach(async () => {

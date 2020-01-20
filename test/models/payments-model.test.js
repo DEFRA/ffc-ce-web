@@ -1,62 +1,18 @@
 const paymentsModel = require('../../server/models/payments-model')
 
 describe('payments model', () => {
-  test('Confirmation title indicates entitlement when entitled flag is true', () => {
+  test('Confirmation text includes title', () => {
+    expect(paymentsModel(true).panel.titleText).toBeDefined()
+  })
+
+  test('Confirmation text indicates entitlement when entitled flag is true', () => {
     const model = paymentsModel(true)
-    expect(model.panel.titleText).toBe('You\'re entitled to a payment')
+    expect(model.panel.html).toBe('You\'re eligible for a payment')
   })
 
-  test('Confirmation title informs no entitlement when entitled flag is false', () => {
+  test('Confirmation text informs no entitlement when entitled flag is false', () => {
     const model = paymentsModel(false)
-    expect(model.panel.titleText).toBe('You\'re not entitled to a payment')
-  })
-
-  test('Confirmation html includes payment when entitled to a payment', () => {
-    const testCases = [36, 82, 194]
-    for (const testCase of testCases) {
-      const model = paymentsModel(true, '', '', testCase)
-      expect(model.panel.html).toContain(testCase.toString())
-    }
-  })
-
-  test('Confirmation html includes parcel ref when entitled to a payment', () => {
-    const testCases = ['AA1111', 'BB2222', 'CC3333']
-    for (const testCase of testCases) {
-      const model = paymentsModel(true, testCase)
-      expect(model.panel.html).toContain(testCase)
-    }
-  })
-
-  test('Confirmation html includes action id when entitled to a payment', () => {
-    const testCases = ['aaa111', 'bbb222', 'ccc333']
-    for (const testCase of testCases) {
-      const model = paymentsModel(true, '', testCase)
-      expect(model.panel.html).toContain(testCase)
-    }
-  })
-
-  test('Confirmation html excludes payment when not entitled to a payment', () => {
-    const testCases = [36, 82, 194]
-    for (const testCase of testCases) {
-      const model = paymentsModel(false, '', '', testCase)
-      expect(model.panel.html).not.toContain(testCase.toString())
-    }
-  })
-
-  test('Confirmation html includes parcel ref when not entitled to a payment', () => {
-    const testCases = ['AA1111', 'BB2222', 'CC3333']
-    for (const testCase of testCases) {
-      const model = paymentsModel(false, testCase)
-      expect(model.panel.html).toContain(testCase)
-    }
-  })
-
-  test('Confirmation html includes action id when not entitled to a payment', () => {
-    const testCases = ['aaa111', 'bbb222', 'ccc333']
-    for (const testCase of testCases) {
-      const model = paymentsModel(false, '', testCase)
-      expect(model.panel.html).toContain(testCase)
-    }
+    expect(model.panel.html).toBe('You\'re not eligible for a payment')
   })
 
   test('Contains eligible flag', () => {
@@ -64,6 +20,30 @@ describe('payments model', () => {
     for (const testCase of testCases) {
       const model = paymentsModel(testCase)
       expect(model.eligible).toBe(testCase)
+    }
+  })
+
+  test('Contains parcelRef', () => {
+    const testCases = ['AA1111', 'BB2222', 'CC3333']
+    for (const testCase of testCases) {
+      const model = paymentsModel(true, testCase, '', 1)
+      expect(model.parcelRef).toBe(testCase)
+    }
+  })
+
+  test('Contains actionId', () => {
+    const testCases = ['aaa111', 'bbb222', 'ccc333']
+    for (const testCase of testCases) {
+      const model = paymentsModel(true, '', testCase, 1)
+      expect(model.actionId).toBe(testCase)
+    }
+  })
+
+  test('Contains payment', () => {
+    const testCases = [36, 82, 194]
+    for (const testCase of testCases) {
+      const model = paymentsModel(true, '', '', testCase)
+      expect(model.payment).toBe(testCase)
     }
   })
 })

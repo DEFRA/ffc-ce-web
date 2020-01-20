@@ -1,12 +1,12 @@
 function actionsInputsModel (parcelRef, actionId, error) {
   const model = {
     hint: {
-      text: `Enter the proposed fence length to apply action ${actionId} to parcel ${parcelRef}`
+      text: 'How long is the fence you want to claim on in metres?'
     },
     label: {
       classes: 'govuk-label--xl',
       isPageHeading: true,
-      text: 'Enter a fence length'
+      text: 'Enter a fence length in metres'
     },
     id: 'actionInput',
     name: 'actionInput'

@@ -8,13 +8,11 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       {{ govukPanel(model.panel) }}
-      {% if model.eligible %}
-      <h2 class="govuk-heading-m">What happens next</h2>
+      <h2 class="govuk-heading-l">Results</h2>
 
       <p class="govuk-body">
-        You will need to make a formal application
+        <span class="govuk-label--l">£{{ model.payment }}</span><span class="govuk-label--s"> for action {{model.actionId}} on parcel {{model.parcelRef}}</span>
       </p>
-      {% endif %}
     </div>
   </div>
 {% endblock %}

@@ -14,18 +14,6 @@ describe('actions inputs model', () => {
     expect(model.errorMessage).toBeUndefined()
   })
 
-  test('hint text contains parcelRef', () => {
-    const parcelRef = 'SS1234'
-    const model = actionsInputsModel(parcelRef, '')
-    expect(model.hint.text).toContain(parcelRef)
-  })
-
-  test('hint text contains actionId', () => {
-    const actionId = 'acb123'
-    const model = actionsInputsModel('', actionId)
-    expect(model.hint.text).toContain(actionId)
-  })
-
   test('label class set to govuk-label--xl', () => {
     const model = actionsInputsModel('', '')
     expect(model.label.classes).toBe('govuk-label--xl')
