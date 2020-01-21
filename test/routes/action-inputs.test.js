@@ -12,7 +12,7 @@ function createMocks () {
 }
 
 describe('Action Inputs route test', () => {
-  const expectedErrorMessage = 'You must enter a number greater than zero with, at most, 2 decimal places'
+  const expectedErrorMessage = 'You must enter a number greater than zero'
   let createServer
   let server
 
@@ -37,7 +37,7 @@ describe('Action Inputs route test', () => {
   })
 
   test('POST /action-inputs route redirects to GET /calculation-result if calculation requested', async () => {
-    const actionInput = 54.5
+    const actionInput = '54.5'
     const postOptions = {
       method: 'POST',
       url: '/action-inputs',
