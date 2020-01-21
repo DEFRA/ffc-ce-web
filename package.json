@@ -59,14 +59,15 @@
   },
   "standard": {
     "globals": [
-      "describe",
-      "beforeEach",
-      "expect",
-      "test",
+      "afterAll",
       "afterEach",
-      "jest",
       "beforeAll",
-      "afterAll"
+      "beforeEach",
+      "describe",
+      "Event",
+      "expect",
+      "jest",
+      "test"
     ]
   }
 }

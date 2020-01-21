@@ -19,7 +19,6 @@ function filterParcels ($filter, $parcels) {
 
   $parcels.forEach($parcel => {
     const parcelRef = $parcel.querySelector('input[name=parcelRef]').value
-
     const parcelMatchesInput = new RegExp($filter.value).test(parcelRef)
 
     if (filterIsEmpty || parcelMatchesInput) {
@@ -30,4 +29,6 @@ function filterParcels ($filter, $parcels) {
   })
 }
 
-new ParcelsPage(document).init()
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = ParcelsPage
+}
