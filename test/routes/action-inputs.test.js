@@ -82,6 +82,22 @@ describe('Action Inputs route test', () => {
     expect(session.setActionInput.mock.calls.length).toBe(0)
   })
 
+  test('POST /action-inputs route returns error message in body if precision is too great', async () => {
+    const actionInput = '54.1234'
+    const postOptions = {
+      method: 'POST',
+      url: '/action-inputs',
+      payload: {
+        actionInput
+      }
+    }
+
+    const postResponse = await server.inject(postOptions)
+    expect(postResponse.statusCode).toBe(200)
+    expect(postResponse.payload).toContain(expectedErrorMessage)
+    expect(session.setActionInput.mock.calls.length).toBe(0)
+  })
+
   afterEach(async () => {
     await server.stop()
     jest.clearAllMocks()
