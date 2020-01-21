@@ -1,11 +1,14 @@
 
-function paymentsModel (entitled, payment) {
-  if (entitled && payment === undefined) {
-    throw new Error('payment should be provided if entitled is true')
-  }
+function paymentsModel (eligible, parcelRef, actionId, payment) {
   return {
-    entitled,
-    payment: payment || 0
+    panel: {
+      titleText: 'Application complete',
+      html: `${eligible ? 'You\'re' : 'You\'re not'} eligible for a payment`
+    },
+    eligible,
+    parcelRef,
+    actionId,
+    payment
   }
 }
 

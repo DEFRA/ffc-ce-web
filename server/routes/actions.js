@@ -25,8 +25,8 @@ module.exports = [
       validate: {
         payload: actionPostSchema,
         failAction: async (request, h) => {
-          const actions = await actionsService.getActions()
           const parcelRef = getParcelRef(request)
+          const actions = await actionsService.getActions(parcelRef)
           const model = actionsModel(actions, parcelRef, 'You must choose an action')
           return h.view('actions', { model }).takeover()
         }

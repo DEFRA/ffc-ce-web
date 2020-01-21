@@ -1,12 +1,18 @@
 {% extends 'layout.njk' %}
 
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
 {% block content %}
-  <div class="govuk-body">
-    <h1>Calculation Result</h1>
-    {% if model.entitled %}
-      We calculate that you would be entitled to a payment of £{{model.payment}} for carrying out that action.
-    {% else %}
-      You are not entitled to carry out that Action on that Parcel.
-    {% endif %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukPanel(model.panel) }}
+      <h2 class="govuk-heading-l">Results</h2>
+
+      <p class="govuk-body">
+        <span class="govuk-label--l">£{{ model.payment }}</span><span class="govuk-label--s"> for action {{model.actionId}} on parcel {{model.parcelRef}}</span>
+      </p>
+    </div>
   </div>
 {% endblock %}

@@ -7,12 +7,12 @@ let session
 function createMocks () {
   jest.mock('../../server/services/actions-service')
   actionsService = require('../../server/services/actions-service')
-  actionsService.getActions = () => { return Promise.resolve([action]) }
+  actionsService.getActions.mockImplementation(() => Promise.resolve([action]))
 
   jest.mock('../../server/session')
   session = require('../../server/session')
-  session.getParcelRef = (request) => parcelRef
-  session.setActionId = jest.fn((request, actionId) => actionId)
+  session.getParcelRef.mockImplementation((request) => parcelRef)
+  session.setActionId.mockImplementation((request, actionId) => actionId)
 }
 
 describe('Actions route test', () => {
@@ -67,6 +67,18 @@ describe('Actions route test', () => {
     expect(postResponse.statusCode).toBe(200)
     expect(postResponse.payload).toContain('You must choose an action')
     expect(session.setActionId.mock.calls.length).toBe(0)
+  })
+
+  test('actions service getActions call requires parcel ref', async () => {
+    const postOptions = {
+      method: 'POST',
+      url: '/actions',
+      payload: {}
+    }
+
+    await server.inject(postOptions)
+
+    expect(actionsService.getActions).toHaveBeenCalledWith(parcelRef)
   })
 
   afterEach(async () => {

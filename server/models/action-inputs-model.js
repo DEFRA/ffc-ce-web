@@ -1,9 +1,12 @@
-function actionsModel (parcelRef, actionId, error) {
+function actionsInputsModel (parcelRef, actionId, error) {
   const model = {
-    parcelRef,
-    actionId,
+    hint: {
+      text: 'How long is the fence you want to claim on in metres?'
+    },
     label: {
-      text: 'Proposed fence length'
+      classes: 'govuk-label--xl',
+      isPageHeading: true,
+      text: 'Enter a fence length in metres'
     },
     id: 'actionInput',
     name: 'actionInput'
@@ -16,4 +19,4 @@ function actionsModel (parcelRef, actionId, error) {
   return model
 }
 
-module.exports = actionsModel
+module.exports = actionsInputsModel

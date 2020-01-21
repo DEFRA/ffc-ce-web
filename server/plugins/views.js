@@ -35,8 +35,8 @@ module.exports = {
     context: {
       appVersion: pkg.version,
       assetPath: '/assets',
-      serviceName: 'FFC Calculation Engine',
-      pageTitle: 'FFC Calculation Engine - GOV.UK',
+      serviceName: 'Agreements calculator',
+      pageTitle: 'Agreements calculator - GOV.UK',
       analyticsAccount: analyticsAccount
     }
   }

@@ -34,8 +34,6 @@ describe('Action Inputs route test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(response.payload).toContain(parcelRef)
-    expect(response.payload).toContain(action.id)
   })
 
   test('POST /action-inputs route redirects to GET /calculation-result if calculation requested', async () => {
