@@ -8,6 +8,7 @@ function actionsInputsModel (parcelRef, actionId, error) {
       isPageHeading: true,
       text: 'Enter a fence length in metres'
     },
+    classes: 'govuk-input--width-10',
     id: 'actionInput',
     name: 'actionInput'
   }
