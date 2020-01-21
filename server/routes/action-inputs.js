@@ -26,7 +26,7 @@ module.exports = [
           const model = actionInputsModel(
             getParcelRef(request),
             getActionId(request),
-            'You must enter a number greater than zero with, at most, 2 decimal places'
+            'You must enter a number greater than zero'
           )
           return h.view('action-inputs', { model }).takeover()
         }
