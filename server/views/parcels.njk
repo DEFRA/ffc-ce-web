@@ -15,15 +15,16 @@
       Choose which parcel of land the scheme will apply to. Use the search box to filter the list below.
     </span>
 
+    {{ govukInput({
+      label: {
+        text: "Search"
+      },
+      classes: "govuk-input--width-10",
+      id: "parcel-ref-filter",
+      name: "parcel-ref-filter"
+    }) }}
+
     <form method="POST" action="/parcels">
-      {{ govukInput({
-        label: {
-          text: "Search"
-        },
-        classes: "govuk-input--width-10",
-        id: "parcel-ref-filter",
-        name: "parcel-ref-filter"
-      }) }}
 
       {{ govukRadios(model) }}
 
