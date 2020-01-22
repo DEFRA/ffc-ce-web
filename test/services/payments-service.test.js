@@ -1,7 +1,8 @@
 const mockConfig = {
-  paymentCalculationUrl: 'payment-calculation-url',
+  paymentUrl: 'payment-url',
   restClientTimeoutMillis: 99
 }
+
 const wreck = require('@hapi/wreck')
 jest.mock('@hapi/wreck')
 wreck.post.mockImplementation(() => Promise.resolve(() => ({ payload: {} })))
@@ -25,10 +26,11 @@ describe('payments service', () => {
       jest.clearAllMocks()
     })
 
-    test('makes a GET request to payment-calculations endpoint', async () => {
-      await paymentsService.calculatePayment(getSampleRequestPayload())
+    test('makes a POST request to payment-calculations endpoint', async () => {
+      const { parcelRef, actionId, quantity } = getSampleRequestPayload()
+      await paymentsService.calculatePayment(parcelRef, actionId, quantity)
       expect(wreck.post).toHaveBeenCalledWith(
-        mockConfig.paymentCalculationUrl,
+        `${mockConfig.paymentUrl}/parcels/${parcelRef}/actions/${actionId}/payment-calculation`,
         expect.any(Object)
       )
     })
@@ -41,45 +43,14 @@ describe('payments service', () => {
       )
     })
 
-    test('passes parcel ref in payload', async () => {
-      const parcelRef = 'abc-123'
-      await paymentsService.calculatePayment(parcelRef, 'a1', 0)
-      expect(wreck.post).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          payload: expect.objectContaining({
-            parcelRef
-          })
-        })
-      )
-    })
-
-    test('passes action in payload', async () => {
-      const id = 'action-1'
-      await paymentsService.calculatePayment('ddd-111', id, 0)
-      expect(wreck.post).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          payload: expect.objectContaining({
-            actions: expect.arrayContaining([
-              expect.objectContaining({ action: { id } })
-            ])
-          })
-        })
-      )
-    })
-
     test('passes quantity in payload', async () => {
       const quantity = 99
       await paymentsService.calculatePayment('ddd-111', 'a1', quantity)
+      const payloadData = JSON.stringify({ quantity })
       expect(wreck.post).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
-          payload: expect.objectContaining({
-            actions: expect.arrayContaining([
-              expect.objectContaining({ options: { quantity } })
-            ])
-          })
+          payload: expect.stringMatching(payloadData)
         })
       )
     })
@@ -92,7 +63,8 @@ describe('payments service', () => {
     })
 
     const getSampleRequestPayload = () => ({
-      parcelRef: '',
+      parcelRef: 'SD12345678',
+      actionId: 'FG1',
       quantity: 0
     })
   })
