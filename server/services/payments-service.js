@@ -3,24 +3,16 @@ const wreck = require('@hapi/wreck').defaults({
   timeout: config.restClientTimeoutMillis
 })
 
-function buildPayload (parcelRef, id, quantity) {
-  return {
-    parcelRef,
-    actions: [{
-      action: { id },
-      options: { quantity }
-    }]
-  }
-}
-
 async function calculatePayment (parcelRef, actionId, quantity) {
+  const payloadData = JSON.stringify({ actionData: { quantity } })
   const result = await wreck.post(
-    config.paymentCalculationUrl,
+    `${config.paymentUrl}/parcels/${parcelRef}/actions/${actionId}/payment-calculation`,
     {
       json: true,
-      payload: buildPayload(parcelRef, actionId, quantity)
+      payload: payloadData
     }
   )
+
   return result.payload
 }
 
