@@ -10,8 +10,6 @@ services:
       COOKIE_PASSWORD: aPasswordNotUsedAnywhereOnlyLocallyWhenTesting
       PAYMENT_CALCULATION_URL: http://ffc-ce-payment-orchestrator:3002/payment-calculation
     volumes:
-      - node_modules:/usr/src/app/node_modules
-      - .:/usr/src/app
-
-volumes:
-  node_modules:
+      - ./server/:/usr/src/app/server/
+      - ./index.js:/usr/src/app/index.js
+      - ./package.json:/usr/src/app/package.json
