@@ -1,4 +1,4 @@
-const action = { id: 'FG1', description: 'Fencing' }
+const action = { id: 'FG1', description: 'Fencing', inputs: [{ upperbound: '100m', lowerbound: '2m' }] }
 const parcelRef = 'PR12345'
 
 let session
@@ -9,6 +9,10 @@ function createMocks () {
   session.getParcelRef = (request) => parcelRef
   session.getActionId = (request) => action.id
   session.setActionInput = jest.fn((request, actionInput) => actionInput)
+
+  jest.mock('../../server/services/actions-service')
+  const actionsService = require('../../server/services/actions-service')
+  actionsService.getActions = jest.fn((parcelId) => [action])
 }
 
 describe('Action Inputs route test', () => {
@@ -34,6 +38,17 @@ describe('Action Inputs route test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+  })
+
+  test('GET /action-inputs displays bounds if available', async () => {
+    const options = {
+      method: 'GET',
+      url: '/action-inputs'
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(response.payload).toContain(`Please choose a value between ${action.inputs[0].lowerbound} and ${action.inputs[0].upperbound}`)
   })
 
   test('POST /action-inputs route redirects to GET /calculation-result if calculation requested', async () => {
@@ -89,5 +104,6 @@ describe('Action Inputs route test', () => {
 
   afterAll(() => {
     jest.unmock('../../server/session')
+    jest.unmock('../../server/services/actions-service')
   })
 })

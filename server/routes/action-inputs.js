@@ -1,3 +1,4 @@
+const actionsService = require('../services/actions-service')
 const actionInputPostSchema = require('../schemas/action-input-post-schema')
 const actionInputsModel = require('../models/action-inputs-model')
 
@@ -8,7 +9,10 @@ module.exports = [
     method: 'GET',
     path: '/action-inputs',
     handler: async (request, h) => {
-      const model = actionInputsModel(getParcelRef(request), getActionId(request))
+      const parcelRef = getParcelRef(request)
+      const actions = await actionsService.getActions(parcelRef)
+      const action = actions.find(a => a.id === getActionId(request))
+      const model = actionInputsModel(getParcelRef(request), action)
       return h.view('action-inputs', { model })
     }
   },
