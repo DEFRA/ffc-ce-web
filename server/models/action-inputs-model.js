@@ -11,12 +11,19 @@ function boundsValid (action) {
   return action && action.inputs && action.inputs[0] && action.inputs[0].upperbound && action.inputs[0].lowerbound
 }
 
-function boundsMessage (action) {
-  return `Please choose a value between ${action.inputs[0].lowerbound} and ${action.inputs[0].upperbound}`
+function getBounds (action) {
+  return boundsValid(action)
+    ? action.inputs.find(input => input.upperbound !== undefined && input.lowerbound !== undefined)
+    : undefined
+}
+
+function boundsMessage (bounds) {
+  return `Please choose a value between ${bounds.lowerbound} and ${bounds.upperbound}.`
 }
 
 function getBoundsHint (action) {
-  return boundsValid(action) ? boundsMessage(action) : ''
+  const bounds = getBounds(action)
+  return bounds ? boundsMessage(bounds) : ''
 }
 
 function actionsInputsModel (parcelRef, action, error, parcels) {
