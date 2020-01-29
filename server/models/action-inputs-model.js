@@ -1,4 +1,4 @@
-function getTitle (actionId, parcelRef) {
+function getTitle (actionId) {
   return actionId === 'FG1' ? 'Enter a fence length in metres' : 'Enter the area in hectares'
 }
 
