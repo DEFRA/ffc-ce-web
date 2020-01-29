@@ -20,15 +20,11 @@ function setActionId (request, actionId) {
 }
 
 function getAllActions (request) {
-  console.log(request.yar.get(allActionsKey))
   return request.yar.get(allActionsKey)
 }
 
 function setAllActions (request, actions) {
-  console.log(actions)
-  request.yar.set(allActionsKey, actions)
-  const act = request.yar.get(allActionsKey)
-  console.log('SET:', act)
+  return request.yar.set(allActionsKey, actions)
 }
 
 function getActionInput (request) {
