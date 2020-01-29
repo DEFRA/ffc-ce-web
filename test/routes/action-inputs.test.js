@@ -4,6 +4,7 @@ const parcelRef = 'PR12345'
 let session
 
 function createMocks () {
+  jest.mock('../../server/services/parcels-service')
   jest.mock('../../server/session')
   session = require('../../server/session')
   session.getParcelRef = (request) => parcelRef

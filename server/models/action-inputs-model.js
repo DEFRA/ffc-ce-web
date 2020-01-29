@@ -1,15 +1,15 @@
-function getTitle (actionId) {
+function getTitle (actionId, parcelRef) {
   return actionId === 'FG1' ? 'Enter a fence length in metres' : 'Enter the area in hectares'
 }
 
-function getHint (actionId) {
-  return actionId === 'FG1' ? 'How long is the fence you want to claim on in metres?' : 'What is the area you wish to claim on in hectares?'
+function getHint (actionId, parcelRef) {
+  return actionId === 'FG1' ? 'How long is the fence you want to claim on in metres for ' + parcelRef + '?' : 'What is the area you wish to claim on in hectares for ' + parcelRef + '?'
 }
 
 function actionsInputsModel (parcelRef, actionId, error) {
   const model = {
     hint: {
-      text: getHint(actionId)
+      text: getHint(actionId, parcelRef)
     },
     label: {
       classes: 'govuk-label--xl',
