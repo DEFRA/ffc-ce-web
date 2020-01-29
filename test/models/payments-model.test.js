@@ -2,23 +2,23 @@ const paymentsModel = require('../../server/models/payments-model')
 
 describe('payments model', () => {
   test('Confirmation text includes title', () => {
-    expect(paymentsModel(true).panel.titleText).toBeDefined()
+    expect(paymentsModel(true, '', '', 1).panel.titleText).toBeDefined()
   })
 
   test('Confirmation text indicates entitlement when entitled flag is true', () => {
-    const model = paymentsModel(true)
+    const model = paymentsModel(true, '', '', 1)
     expect(model.panel.html).toBe('You\'re eligible for a payment')
   })
 
   test('Confirmation text informs no entitlement when entitled flag is false', () => {
-    const model = paymentsModel(false)
+    const model = paymentsModel(false, '', '', 1)
     expect(model.panel.html).toBe('You\'re not eligible for a payment')
   })
 
   test('Contains eligible flag', () => {
     const testCases = [true, false]
     for (const testCase of testCases) {
-      const model = paymentsModel(testCase)
+      const model = paymentsModel(testCase, '', '', 1)
       expect(model.eligible).toBe(testCase)
     }
   })
@@ -40,10 +40,27 @@ describe('payments model', () => {
   })
 
   test('Contains payment', () => {
-    const testCases = [36, 82, 194]
+    const testCases = [
+      {
+        input: 36.124214,
+        output: '36.12'
+      },
+      {
+        input: 82,
+        output: '82.00'
+      },
+      {
+        input: 0.158,
+        output: '0.16'
+      },
+      {
+        input: 194.1,
+        output: '194.10'
+      }
+    ]
     for (const testCase of testCases) {
-      const model = paymentsModel(true, '', '', testCase)
-      expect(model.payment).toBe(testCase)
+      const model = paymentsModel(true, '', '', testCase.input)
+      expect(model.payment).toBe(testCase.output)
     }
   })
 })

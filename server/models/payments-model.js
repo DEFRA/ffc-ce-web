@@ -8,7 +8,7 @@ function paymentsModel (eligible, parcelRef, actionId, payment) {
     eligible,
     parcelRef,
     actionId,
-    payment
+    payment: payment ? payment.toFixed(2) : ''
   }
 }
 
