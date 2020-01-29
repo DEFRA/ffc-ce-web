@@ -9,7 +9,9 @@ module.exports = [
     handler: async (request, h) => {
       const parcelRef = getParcelRef(request)
       const actionId = getActionId(request)
-      const actionDescription = getAllActions(request).find((action) => action.id === actionId).description
+      const allActions = getAllActions(request)
+      const action = allActions.find((action) => action.id === actionId)
+      const actionDescription = action ? action.description : ''
       const actionInput = getActionInput(request)
       const payment = await paymentService.calculatePayment(parcelRef, actionId, actionInput)
       const errorList = []
