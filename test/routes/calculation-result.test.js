@@ -13,6 +13,7 @@ describe('Payments route test', () => {
     paymentService.calculatePayment.mockImplementation(() => ({ eligible: true, value: 1 }))
     session.getParcelRef.mockImplementation(() => 'ddd-111')
     session.getActionId.mockImplementation(() => 'action-1')
+    session.getAllActions.mockImplementation(() => ([{ id: 'action-1', description: 'action description' }]))
     session.getActionInput.mockImplementation(() => 1)
     server = await createServer()
   })
@@ -103,14 +104,14 @@ describe('Payments route test', () => {
     for (const testCase of testCases) {
       paymentService.calculatePayment.mockImplementation(() => ({ eligible: testCase, value: 1 }))
       const response = await server.inject(getOptions())
-      expect(response.payload).toContain('Result')
+      expect(response.payload).toContain('Summary')
     }
   })
 
   test('Displays not entitled message in response when paymentService deems a parcel ineligible', async () => {
     paymentService.calculatePayment.mockImplementation(() => ({ eligible: false }))
     const response = await server.inject(getOptions())
-    expect(response.payload).toContain('You\'re not eligible for a payment')
+    expect(response.payload).toContain('Application unsuccessful')
   })
 
   test('Displays parcel ref in response for ineligible application', async () => {

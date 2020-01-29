@@ -1,5 +1,6 @@
 const parcelRefKey = 'parcelref'
 const actionIdKey = 'actionid'
+const allActionsKey = 'allactions'
 const actionInputKey = 'actioninput'
 
 function getParcelRef (request) {
@@ -18,6 +19,14 @@ function setActionId (request, actionId) {
   return request.yar.set(actionIdKey, actionId)
 }
 
+function getAllActions (request) {
+  return request.yar.get(allActionsKey)
+}
+
+function setAllActions (request, actions) {
+  return request.yar.set(allActionsKey, actions)
+}
+
 function getActionInput (request) {
   return request.yar.get(actionInputKey)
 }
@@ -31,6 +40,8 @@ module.exports = {
   setParcelRef,
   getActionId,
   setActionId,
+  getAllActions,
+  setAllActions,
   getActionInput,
   setActionInput
 }
