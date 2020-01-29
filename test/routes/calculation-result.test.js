@@ -13,6 +13,7 @@ describe('Payments route test', () => {
     paymentService.calculatePayment.mockImplementation(() => ({ eligible: true, value: 1 }))
     session.getParcelRef.mockImplementation(() => 'ddd-111')
     session.getActionId.mockImplementation(() => 'action-1')
+    session.getAllActions.mockImplementation(() => ({ id: 'action-1', description: 'action description' }))
     session.getActionInput.mockImplementation(() => 1)
     server = await createServer()
   })

@@ -3,6 +3,7 @@ const paymentsModel = require('../../server/models/payments-model')
 describe('payments model', () => {
   test('Confirmation text includes title', () => {
     expect(paymentsModel(true, '', '', 1).panel.titleText).toBeDefined()
+    expect(paymentsModel(false, '', '', 1).panel.titleText).toBeDefined()
   })
 
   test('Confirmation text indicates entitlement when entitled flag is true', () => {
@@ -10,9 +11,23 @@ describe('payments model', () => {
     expect(model.panel.html).toBe('You\'re eligible for a payment')
   })
 
-  test('Confirmation text informs no entitlement when entitled flag is false', () => {
+  test('Confirmation text informs application unsuccessful when entitled flag is false', () => {
     const model = paymentsModel(false, '', '', 1)
-    expect(model.panel.html).toBe('You\'re not eligible for a payment')
+    expect(model.error.titleText).toBe('Application unsuccessful')
+  })
+
+  test('Confirmation text includes error messages when entitled flag is false', () => {
+    const model = paymentsModel(false, '', '', 1, ['Message 1', 'Message 2'])
+    expect(model.error.errorList).toStrictEqual(
+      [
+        {
+          text: 'Message 1'
+        },
+        {
+          text: 'Message 2'
+        }
+      ]
+    )
   })
 
   test('Contains eligible flag', () => {
@@ -35,7 +50,7 @@ describe('payments model', () => {
     const testCases = ['aaa111', 'bbb222', 'ccc333']
     for (const testCase of testCases) {
       const model = paymentsModel(true, '', testCase, 1)
-      expect(model.actionId).toBe(testCase)
+      expect(model.actionTitle).toBe(testCase)
     }
   })
 

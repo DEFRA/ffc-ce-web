@@ -6,7 +6,7 @@ function paymentsModel (eligible, parcelRef, actionTitle, payment, errors) {
     },
     error: {
       titleText: 'Application unsuccessful',
-      errorList: errors.map((error) => ({ text: error }))
+      errorList: errors ? errors.map((error) => ({ text: error })) : []
     },
     eligible,
     parcelRef,
