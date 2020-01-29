@@ -8,7 +8,7 @@ function parcelsModel (parcels, errorMessage) {
     idPrefix: parcelRef,
     name: parcelRef,
     hint: {
-      text: 'Select a parcel of land for the scheme'
+      text: 'Select a parcel of land for the application'
     },
     items
   }
