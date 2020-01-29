@@ -7,7 +7,7 @@ module.exports = [
   {
     method: 'GET',
     path: '/action-inputs',
-    handler: (request, h) => {
+    handler: async (request, h) => {
       const model = actionInputsModel(getParcelRef(request), getActionId(request))
       return h.view('action-inputs', { model })
     }
@@ -22,7 +22,7 @@ module.exports = [
     options: {
       validate: {
         payload: actionInputPostSchema,
-        failAction: (request, h) => {
+        failAction: async (request, h) => {
           const model = actionInputsModel(
             getParcelRef(request),
             getActionId(request),
