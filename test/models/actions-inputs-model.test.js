@@ -38,22 +38,22 @@ describe('actions inputs model', () => {
   test('title and hint refers to fencing for Action ID FG1', () => {
     const model = actionsInputsModel('', { id: 'FG1' }).model
     expect(model.label.text).toBe('Enter a fence length in metres')
-    expect(model.hint.text).toBe('How long is the fence you want to claim on in metres for ? ')
+    expect(model.hint.text.trim()).toBe('How long is the fence you want to claim on in metres for ?')
   })
 
   test('title and hintrefers to acres for Action ID SW6', () => {
-    const model = actionsInputsModel('', 'SW6').model
+    const model = actionsInputsModel('', { id: 'SW6' }).model
     expect(model.label.text).toBe('Enter the area in hectares')
-    expect(model.hint.text).toBe('What is the area you wish to claim on in hectares for ? ')
+    expect(model.hint.text.trim()).toBe('What is the area you wish to claim on in hectares for ?')
   })
 
   test('Parcel data is included in the model when a parcel is included', () => {
-    const parcelModel = actionsInputsModel('AAA', 'FG1', '', allParcels).parcelModel
+    const parcelModel = actionsInputsModel('AAA', { id: 'FG1' }, '', allParcels).parcelModel
     expect(parcelModel.caption).toBe('Parcel Information')
   })
 
   test('Parcel data is not included in the model when a parcel is not included', () => {
-    const parcelModel = actionsInputsModel('AAA', 'FG1', '', allParcels).parcelModel
+    const parcelModel = actionsInputsModel('AAA', { id: 'FG1' }, '', allParcels).parcelModel
     expect(parcelModel).toMatchObject({})
   })
 })
