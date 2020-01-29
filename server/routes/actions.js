@@ -1,7 +1,7 @@
 const actionsService = require('../services/actions-service')
 const actionsModel = require('../models/actions-model')
 const actionPostSchema = require('../schemas/actions-post-schema')
-const { getParcelRef, setActionId } = require('../session')
+const { getParcelRef, setActionId, setAllActions } = require('../session')
 
 module.exports = [
   {
@@ -10,6 +10,7 @@ module.exports = [
     handler: async (request, h) => {
       const parcelRef = getParcelRef(request)
       const actions = await actionsService.getActions(parcelRef)
+      setAllActions(request, actions)
       const model = actionsModel(actions, parcelRef)
       return h.view('actions', { model })
     }

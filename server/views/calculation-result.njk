@@ -3,16 +3,28 @@
 {% set mainClasses = "govuk-main-wrapper--l" %}
 
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      {{ govukPanel(model.panel) }}
-      <h2 class="govuk-heading-l">Results</h2>
+      {% if model.eligible %}
+        {{ govukPanel(model.panel) }}
+      {% else %}
+        {{ govukErrorSummary(model.error) }}
+      {% endif %}
+
+      <h2 class="govuk-heading-m">Summary</h2>
 
       <p class="govuk-body">
-        <span class="govuk-label--l">£{% if model.payment === undefined %}0.00{% else %}{{ model.payment }}{% endif %}</span>
-        <span class="govuk-label--s"> for action {{model.actionId}} on parcel {{model.parcelRef}}</span>
+          {% if model.eligible %}
+            <span class="govuk-label--m">£{{ model.payment }}</span>
+          {% else %}
+            <span class="govuk-!-font-weight-bold">Not eligible</span>
+          {% endif %}
+          for action <span class="govuk-!-font-weight-bold">{{model.actionTitle}}</span>
+          on parcel <span class="govuk-!-font-weight-bold">{{model.parcelRef}}</span>
+        </span>
       </p>
     </div>
   </div>
