@@ -7,13 +7,11 @@ function getHint (actionId) {
 }
 
 function boundsValid (action) {
-  return action && action.inputs && action.inputs[0] && action.inputs[0].upperbound && action.inputs[0].lowerbound
+  return action && action.input && action.input.upperbound && action.input.lowerbound
 }
 
 function getBounds (action) {
-  return boundsValid(action)
-    ? action.inputs.find(input => input.upperbound !== undefined && input.lowerbound !== undefined)
-    : undefined
+  return boundsValid(action) ? action.input : undefined
 }
 
 function boundsMessage (bounds) {

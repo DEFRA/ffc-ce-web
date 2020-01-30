@@ -1,4 +1,4 @@
-const action = { id: 'FG1', description: 'Fencing', inputs: [{ upperbound: '100m', lowerbound: '2m' }] }
+const action = { id: 'FG1', description: 'Fencing', input: { upperbound: '100m', lowerbound: '2m' } }
 const parcelRef = 'PR12345'
 
 let session
@@ -48,7 +48,7 @@ describe('Action Inputs route test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
-    expect(response.payload).toContain(`Please choose a value between ${action.inputs[0].lowerbound} and ${action.inputs[0].upperbound}`)
+    expect(response.payload).toContain(`Please choose a value between ${action.input.lowerbound} and ${action.input.upperbound}`)
   })
 
   test('POST /action-inputs route redirects to GET /calculation-result if calculation requested', async () => {
