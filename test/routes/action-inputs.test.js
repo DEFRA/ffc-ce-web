@@ -1,5 +1,6 @@
 const action = { id: 'FG1', description: 'Fencing' }
 const parcelRef = 'PR12345'
+const allParcels = [{ ref: parcelRef, description: 'Test parcel', totalPerimeter: 10, totalArea: 1 }]
 
 let session
 
@@ -8,6 +9,7 @@ function createMocks () {
   session = require('../../server/session')
   session.getParcelRef = (request) => parcelRef
   session.getActionId = (request) => action.id
+  session.getAllParcelData = (request) => allParcels
   session.setActionInput = jest.fn((request, actionInput) => actionInput)
 }
 

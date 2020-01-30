@@ -5,10 +5,15 @@
     {% from "govuk/components/button/macro.njk" import govukButton %}
     {% from "govuk/components/input/macro.njk" import govukInput %}
     {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
+    {% from "govuk/components/table/macro.njk" import govukTable %}
 
     <form method="POST" action="/action-inputs">
-      {{ govukInput(model) }}
+      {{ govukInput(model.model) }}
       {{ govukButton({ text: "Continue" }) }}
     </form>
+    {% if model.parcelModel %}
+    {{ govukTable(model.parcelModel) }}
+    {% endif %}
+
   </div>
 {% endblock %}
