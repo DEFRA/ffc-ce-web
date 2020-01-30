@@ -19,8 +19,8 @@ container:
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   restartPolicy: Always
-  paymentUrl: http://ffc-ce-payment-orchestrator.ffc-ce
-  paymentCalculationUrl: http://ffc-ce-payment-orchestrator.ffc-ce/payment-calculation
+  paymentUrl: http://ffc-ce-payment-orchestrator.ffc-ce-payment-orchestrator-pr27
+  paymentCalculationUrl: http://ffc-ce-payment-orchestrator.ffc-ce-payment-orchestrator-pr27/payment-calculation
   cookiePassword:
   restClientTimeoutMillis: 20000
   staticCacheTimeoutMillis: 54000
