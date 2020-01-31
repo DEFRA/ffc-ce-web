@@ -15,7 +15,7 @@ describe('actionsModel', () => {
     expect(model.items[0].value).toEqual(action.id)
     expect(model.items[0].text).toEqual(`${action.id}: ${action.description}`)
     expect(model.errorMessage.text).toEqual(errorMessage)
-    expect(model.hint.text).toEqual(`Select an action to apply to parcel ${parcelRef}`)
+    expect(model.hint.text).toEqual(`Select an action to apply to land parcel ${parcelRef}`)
   })
 
   test('actions model should omit errorMessage if no error is provided', () => {

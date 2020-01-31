@@ -15,7 +15,7 @@ function actionsModel (actions, parcelRef, errorMessage) {
       }
     },
     hint: {
-      text: `Select an action to apply to parcel ${parcelRef}`
+      text: `Select an action to apply to land parcel ${parcelRef}`
     },
     items
   }
