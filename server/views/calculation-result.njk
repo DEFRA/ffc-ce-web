@@ -18,14 +18,14 @@
           on land parcel <span class="govuk-!-font-weight-bold">{{model.parcelRef}}</span>
         </p>
       {% else %}
-      <div class="govuk-grid-row">
+
         <h1 class="govuk-heading-xl">Sorry, your application was unsuccessful</h1>
         <h2 class="govuk-heading-m">Summary</h2>
         <p class="govuk-body">
           Land parcel <span class="govuk-!-font-weight-bold">{{model.parcelRef}}</span> 
           is not eligible for action <span class="govuk-!-font-weight-bold">{{model.actionTitle}}</span>
         </p>
-      </div>
+
       {% endif %}
     </div>
   </div>
