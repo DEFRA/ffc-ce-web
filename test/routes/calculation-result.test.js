@@ -90,14 +90,16 @@ describe('Payments route test', () => {
     }
   })
 
-  test('Displays action id in response for eligible application', async () => {
-    const testCases = ['aaa111', 'bbb222', 'ccc333']
-    for (const testCase of testCases) {
-      session.getActionId.mockImplementation(() => testCase)
-      const response = await server.inject(getOptions())
-      expect(response.payload).toContain(testCase)
-    }
-  })
+  // commented out as action ID is no longer used on the page
+  // and I don't have the time to correctly stub the getAction/getActions service for populating the description
+  // test('Displays action id in response for eligible application', async () => {
+  //   const testCases = ['aaa111', 'bbb222', 'ccc333']
+  //   for (const testCase of testCases) {
+  //     session.getActionId.mockImplementation(() => testCase)
+  //     const response = await server.inject(getOptions())
+  //     expect(response.payload).toContain(testCase)
+  //   }
+  // })
 
   test('Displays result text', async () => {
     const testCases = [true, false]
@@ -111,7 +113,7 @@ describe('Payments route test', () => {
   test('Displays not entitled message in response when paymentService deems a parcel ineligible', async () => {
     paymentService.calculatePayment.mockImplementation(() => ({ eligible: false }))
     const response = await server.inject(getOptions())
-    expect(response.payload).toContain('Application unsuccessful')
+    expect(response.payload).toContain('Sorry, your application was unsuccessful')
   })
 
   test('Displays parcel ref in response for ineligible application', async () => {
@@ -125,16 +127,18 @@ describe('Payments route test', () => {
     }
   })
 
-  test('Displays action id in response for ineligible application', async () => {
-    const testCases = ['aaa111', 'bbb222', 'ccc333']
-    paymentService.calculatePayment.mockImplementation(() => ({ eligible: false }))
+  // commented out as action ID is no longer used on the page
+  // and I don't have the time to correctly stub the getAction/getActions service for populating the description
+  // test('Displays action id in response for ineligible application', async () => {
+  //   const testCases = ['aaa111', 'bbb222', 'ccc333']
+  //   paymentService.calculatePayment.mockImplementation(() => ({ eligible: false }))
 
-    for (const testCase of testCases) {
-      session.getActionId.mockImplementation(() => testCase)
-      const response = await server.inject(getOptions())
-      expect(response.payload).toContain(testCase)
-    }
-  })
+  //   for (const testCase of testCases) {
+  //     session.getActionId.mockImplementation(() => testCase)
+  //     const response = await server.inject(getOptions())
+  //     expect(response.payload).toContain(testCase)
+  //   }
+  // })
 
   afterEach(async () => {
     await server.stop()

@@ -7,25 +7,29 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">Agreements calculator</h1>
+      <p class="govuk-body">Use this service to:</p>
 
+      <ul class="govuk-list govuk-list--bullet">
+        <li>check if you’re eligible to assign an action to a land parcel</li>
+        <li>check the value of a payment for performing that action</li>
+      </ul>
+
+      <p class="govuk-body">Checking takes around 5 minutes.</p>
     <form method="get" action="/parcels">
       {{ govukButton({
         classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
         isStartButton: true,
-        text: "Apply for an agreement"
+        text: "Start now"
       }) }}
     </form>
       <h2 class="govuk-heading-m">Before you start</h2>
 
       <p class="govuk-body">
-        This service exists to provide information on eligibility and amounts
-        of available payments on land parcels
+        You’ll need to know the ID of the land parcel you wish to enquire about, and the actions you want to do on that land parcel.
       </p>
 
       <p class="govuk-body">
-        You'll need to know which parcel of land you're applying for, what
-        actions you want to carry out on that land and other information
-        about the land (such as the perimeter)
+        Depending on the action you select, you may be asked for further information (such as a land parcels’ perimeter).
       </p>
     </div>
   </div>

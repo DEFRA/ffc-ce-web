@@ -10,22 +10,23 @@
     <div class="govuk-grid-column-two-thirds">
       {% if model.eligible %}
         {{ govukPanel(model.panel) }}
+        <h2 class="govuk-heading-m">Summary</h2>
+        <p class="govuk-body">
+          You would receive <span class="govuk-label--m">£{{ model.payment }}</span>
+          for performing action 
+          <span class="govuk-!-font-weight-bold">{{model.actionTitle}}</span>
+          on land parcel <span class="govuk-!-font-weight-bold">{{model.parcelRef}}</span>
+        </p>
       {% else %}
-        {{ govukErrorSummary(model.error) }}
+
+        <h1 class="govuk-heading-xl">Sorry, your application was unsuccessful</h1>
+        <h2 class="govuk-heading-m">Summary</h2>
+        <p class="govuk-body">
+          Land parcel <span class="govuk-!-font-weight-bold">{{model.parcelRef}}</span> 
+          is not eligible for action <span class="govuk-!-font-weight-bold">{{model.actionTitle}}</span>
+        </p>
+
       {% endif %}
-
-      <h2 class="govuk-heading-m">Summary</h2>
-
-      <p class="govuk-body">
-          {% if model.eligible %}
-            <span class="govuk-label--m">£{{ model.payment }}</span>
-          {% else %}
-            <span class="govuk-!-font-weight-bold">Not eligible</span>
-          {% endif %}
-          for action <span class="govuk-!-font-weight-bold">{{model.actionTitle}}</span>
-          on parcel <span class="govuk-!-font-weight-bold">{{model.parcelRef}}</span>
-        </span>
-      </p>
     </div>
   </div>
 {% endblock %}

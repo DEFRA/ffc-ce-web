@@ -2,7 +2,7 @@ const actionId = 'actionId'
 
 function actionsModel (actions, parcelRef, errorMessage) {
   const items = actions.map(action => {
-    return { value: action.id, text: `${action.id}: ${action.description}` }
+    return { value: action.id, text: action.description }
   })
   const model = {
     idPrefix: actionId,
@@ -15,7 +15,7 @@ function actionsModel (actions, parcelRef, errorMessage) {
       }
     },
     hint: {
-      text: `Select an action to apply to parcel ${parcelRef}`
+      text: `Select an action to apply to land parcel ${parcelRef}`
     },
     items
   }
