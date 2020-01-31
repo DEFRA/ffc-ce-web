@@ -18,12 +18,14 @@
 
       <p class="govuk-body">
           {% if model.eligible %}
-            <span class="govuk-label--m">£{{ model.payment }}</span>
+            You would receive <span class="govuk-label--m">£{{ model.payment }}</span>
+            for performing action 
+            <span class="govuk-!-font-weight-bold">{{model.actionTitle}}</span>
+            on land parcel <span class="govuk-!-font-weight-bold">{{model.parcelRef}}</span>
           {% else %}
-            <span class="govuk-!-font-weight-bold">Not eligible</span>
+            Land parcel <span class="govuk-!-font-weight-bold">{{model.parcelRef}}</span> 
+            is not eligible for action <span class="govuk-!-font-weight-bold">{{model.actionTitle}}</span>
           {% endif %}
-          for action <span class="govuk-!-font-weight-bold">{{model.actionTitle}}</span>
-          on parcel <span class="govuk-!-font-weight-bold">{{model.parcelRef}}</span>
         </span>
       </p>
     </div>
