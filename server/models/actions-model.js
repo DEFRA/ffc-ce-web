@@ -2,7 +2,7 @@ const actionId = 'actionId'
 
 function actionsModel (actions, parcelRef, errorMessage) {
   const items = actions.map(action => {
-    return { value: action.id, text: `${action.id}: ${action.description}` }
+    return { value: action.id, text: action.description }
   })
   const model = {
     idPrefix: actionId,

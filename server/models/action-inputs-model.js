@@ -2,15 +2,15 @@ function getTitle (actionId) {
   return actionId === 'FG1' ? 'Enter a fence length in metres' : 'Enter the area in hectares'
 }
 
-function getHint (actionId, parcelRef) {
+function getHint (actionId) {
   // TODO: Unsafe use of potentially unvalidated user input.
-  return actionId === 'FG1' ? `How long is the fence you want to claim on in metres for ${parcelRef}?` : `What is the area you wish to claim on in hectares for ${parcelRef}?`
+  return actionId === 'FG1' ? 'How long is the fence you want to claim for in metres?' : 'What is the area you wish to claim for in hectares?'
 }
 
 function actionsInputsModel (parcelRef, actionId, error, parcels) {
   const model = {
     hint: {
-      text: getHint(actionId, parcelRef)
+      text: getHint(actionId)
     },
     label: {
       classes: 'govuk-label--xl',
