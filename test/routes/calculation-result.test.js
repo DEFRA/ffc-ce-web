@@ -113,7 +113,7 @@ describe('Payments route test', () => {
   test('Displays not entitled message in response when paymentService deems a parcel ineligible', async () => {
     paymentService.calculatePayment.mockImplementation(() => ({ eligible: false }))
     const response = await server.inject(getOptions())
-    expect(response.payload).toContain('Application unsuccessful')
+    expect(response.payload).toContain('Sorry, your application was unsuccessful')
   })
 
   test('Displays parcel ref in response for ineligible application', async () => {
