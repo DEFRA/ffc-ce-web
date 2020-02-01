@@ -24,8 +24,14 @@ function actionsModel (actions, parcelRef, errorMessage) {
       })
   }
 
+  if (errorMessage) {
+    selectModel.errorMessage = {
+      text: errorMessage
+    }
+  }
+
   const ineligibleModel = {
-    caption: 'Ineligible Actions',
+    caption: 'Ineligible actions',
     captionClasses: 'govuk-label--l',
     rows: actions
       .filter((action) => { return !action.eligible })
@@ -37,11 +43,6 @@ function actionsModel (actions, parcelRef, errorMessage) {
       })
   }
 
-  if (errorMessage) {
-    selectModel.errorMessage = {
-      text: errorMessage
-    }
-  }
   return { selectModel, ineligibleModel }
 }
 

@@ -1,5 +1,11 @@
 let actionsService
-const action = { id: 'FG1', description: 'Fencing' }
+
+const goodActionID = 'GOOD1'
+
+const actions = [
+  { id: goodActionID, description: 'Fencing', eligible: true },
+  { id: 'BAD1', description: 'New Action', eligible: false, reason: 'Why it is false' }
+]
 const parcelRef = 'PR12345'
 
 let session
@@ -7,7 +13,7 @@ let session
 function createMocks () {
   jest.mock('../../server/services/actions-service')
   actionsService = require('../../server/services/actions-service')
-  actionsService.getActions.mockImplementation(() => Promise.resolve([action]))
+  actionsService.getActions.mockImplementation(() => Promise.resolve(actions))
 
   jest.mock('../../server/session')
   session = require('../../server/session')
@@ -28,6 +34,7 @@ describe('Actions route test', () => {
     server = await createServer()
     await server.initialize()
   })
+
   test('GET /actions route returns 200', async () => {
     const options = {
       method: 'GET',
@@ -36,7 +43,9 @@ describe('Actions route test', () => {
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
     expect(response.payload).toContain(parcelRef)
-    expect(response.payload).toContain(action.id)
+    expect(response.payload).toContain(goodActionID)
+    expect(response.payload).toContain(actions[1].id)
+    expect(response.payload).toContain(actions[1].reason)
   })
 
   test('POST /actions route redirects to GET /action-inputs if action chosen', async () => {
@@ -44,7 +53,7 @@ describe('Actions route test', () => {
       method: 'POST',
       url: '/actions',
       payload: {
-        actionId: action.id
+        actionId: goodActionID
       }
     }
 
@@ -53,7 +62,7 @@ describe('Actions route test', () => {
     expect(postResponse.headers.location).toBe('/action-inputs')
 
     expect(session.setActionId.mock.calls.length).toBe(1)
-    expect(session.setActionId.mock.calls[0][1]).toBe(action.id)
+    expect(session.setActionId.mock.calls[0][1]).toBe(goodActionID)
   })
 
   test('POST /actions route returns error message in body if no action chosen', async () => {
@@ -84,10 +93,5 @@ describe('Actions route test', () => {
   afterEach(async () => {
     await server.stop()
     jest.clearAllMocks()
-  })
-
-  afterAll(() => {
-    jest.unmock('../../server/services/actions-service')
-    jest.unmock('../../server/session')
   })
 })

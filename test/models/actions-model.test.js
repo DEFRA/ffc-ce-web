@@ -2,20 +2,35 @@ const actionModel = require('../../server/models/actions-model')
 
 describe('actionsModel', () => {
   test('actions model should set items value and text, and error message', () => {
-    const action = {
+    const badAction = {
       id: 'id1',
-      description: 'description'
+      description: 'description',
+      eligible: false,
+      reason: 'bad action'
     }
+
+    const goodAction = {
+      id: 'id2',
+      description: 'description',
+      eligible: true
+    }
+
     const parcelRef = 'ref1'
     const errorMessage = 'error'
-    const model = actionModel([action], parcelRef, errorMessage)
+    const model = actionModel([goodAction, badAction], parcelRef, errorMessage)
+
     expect(model).toBeDefined()
-    expect(model.items).toBeDefined()
-    expect(model.items.length).toEqual(1)
-    expect(model.items[0].value).toEqual(action.id)
-    expect(model.items[0].text).toEqual(`${action.id}: ${action.description}`)
-    expect(model.errorMessage.text).toEqual(errorMessage)
-    expect(model.hint.text).toEqual(`Select an action to apply to parcel ${parcelRef}`)
+    expect(model.selectModel).toBeDefined()
+    expect(model.selectModel.items.length).toEqual(1)
+    expect(model.selectModel.items[0].value).toEqual(goodAction.id)
+    expect(model.selectModel.items[0].text).toEqual(`${goodAction.id}: ${goodAction.description}`)
+    expect(model.selectModel.errorMessage.text).toEqual(errorMessage)
+    expect(model.selectModel.hint.text).toEqual(`Select an action to apply to parcel ${parcelRef}`)
+
+    expect(model.ineligibleModel).toBeDefined()
+    expect(model.ineligibleModel.rows.length).toEqual(1)
+    expect(model.ineligibleModel.rows[0][0].text).toEqual(`${badAction.id}: ${badAction.description}`)
+    expect(model.ineligibleModel.rows[0][1].text).toEqual(badAction.reason)
   })
 
   test('actions model should omit errorMessage if no error is provided', () => {

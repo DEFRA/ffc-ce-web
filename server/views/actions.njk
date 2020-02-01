@@ -12,7 +12,7 @@
       {{ govukButton({ text: "Continue" }) }}
     </form>
 
-    {% if model.ineligibleModel %}
+    {% if model.ineligibleModel.rows|length > 0 %}
     {{ govukTable(model.ineligibleModel) }}
     {% endif %}
   </div>
