@@ -31,7 +31,7 @@ module.exports = [
           const parcels = getAllParcelData(request)
           const model = actionInputsModel(
             getParcelRef(request),
-            getActionId(request),
+            { id: getActionId(request) },
             'You must enter a number greater than zero',
             parcels
           )

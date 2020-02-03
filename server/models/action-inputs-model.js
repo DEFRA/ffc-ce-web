@@ -25,6 +25,10 @@ function getBoundsHint (action) {
 }
 
 function actionsInputsModel (parcelRef, action, error, parcels) {
+  if (!action.id) {
+    throw new Error('Missing action id')
+  }
+
   const model = {
     hint: {
       text: `${getHint(action.id, parcelRef)} ${getBoundsHint(action)}`

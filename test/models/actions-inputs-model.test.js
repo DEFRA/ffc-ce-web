@@ -2,42 +2,45 @@ const actionsInputsModel = require('../../server/models/action-inputs-model')
 const allParcels = [{ ref: 'AAA', description: 'Test parcel', totalPerimeter: 10, totalArea: 1 }]
 
 describe('actions inputs model', () => {
+  const action = {
+    id: 'FG1'
+  }
   test('if error provided, should populate errorMessage', () => {
     const error = 'sample error message'
-    const { model } = actionsInputsModel('', {}, error)
+    const { model } = actionsInputsModel('', action, error)
     expect(model.errorMessage).toEqual(
       expect.objectContaining({ text: error })
     )
   })
 
   test('if error isn\'t provided, errorMessage should be omitted', () => {
-    const { model } = actionsInputsModel('', {})
+    const { model } = actionsInputsModel('', action)
     expect(model.errorMessage).toBeUndefined()
   })
 
   test('label class set to govuk-label--xl', () => {
-    const { model } = actionsInputsModel('', {})
+    const { model } = actionsInputsModel('', action)
     expect(model.label.classes).toBe('govuk-label--xl')
   })
 
   test('label isPageHeading is true', () => {
-    const { model } = actionsInputsModel('', {})
+    const { model } = actionsInputsModel('', action)
     expect(model.label.isPageHeading).toBeTruthy()
   })
 
   test('id is actionInput', () => {
-    const { model } = actionsInputsModel('', {})
+    const { model } = actionsInputsModel('', action)
     expect(model.id).toBe('actionInput')
   })
 
   test('name is actionInput', () => {
-    const { model } = actionsInputsModel('', {})
+    const { model } = actionsInputsModel('', action)
     expect(model.label.classes).toBe('govuk-label--xl')
   })
 
   test('title and hint refers to fencing for Action ID FG1', () => {
     const parcelRef = 'AB1234'
-    const { model } = actionsInputsModel(parcelRef, { id: 'FG1' })
+    const { model } = actionsInputsModel(parcelRef, action)
     expect(model.label.text).toBe('Enter a fence length in metres')
     expect(model.hint.text.trim()).toBe(`How long is the fence you want to claim on in metres for ${parcelRef}?`)
   })
