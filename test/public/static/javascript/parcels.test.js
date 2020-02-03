@@ -45,4 +45,13 @@ describe('parcels page', () => {
 
     expect($dom.querySelectorAll('.govuk-radios__item:not(.hidden)').length).toBe(2)
   })
+
+  test('filter is case insensitive', () => {
+    const $filter = $dom.querySelector('#parcel-ref-filter')
+
+    $filter.value = 'aB'
+    $filter.dispatchEvent(inputEvent)
+
+    expect($dom.querySelectorAll('.govuk-radios__item:not(.hidden)').length).toBe(3)
+  })
 })

@@ -16,10 +16,11 @@ ParcelsPage.prototype.init = function () {
 
 function filterParcels ($filter, $parcels) {
   const filterIsEmpty = $filter.value.length === 0
+  const filter = $filter.value.toUpperCase()
 
   $parcels.forEach($parcel => {
     const parcelRef = $parcel.querySelector('input[name=parcelRef]').value
-    const parcelMatchesInput = new RegExp($filter.value).test(parcelRef)
+    const parcelMatchesInput = new RegExp(filter).test(parcelRef.toUpperCase())
 
     if (filterIsEmpty || parcelMatchesInput) {
       $parcel.classList.remove('hidden')

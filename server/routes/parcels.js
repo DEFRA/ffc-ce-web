@@ -1,7 +1,7 @@
 const parcelService = require('../services/parcels-service')
 const parcelModel = require('../models/parcels-model')
 const parcelPostSchema = require('../schemas/parcels-post-schema')
-const { setParcelRef } = require('../session')
+const { setParcelRef, setAllParcelData } = require('../session')
 
 module.exports = [
   {
@@ -9,6 +9,7 @@ module.exports = [
     path: '/parcels',
     handler: async (request, h) => {
       const parcels = await parcelService.getParcels()
+      setAllParcelData(request, parcels)
       const model = parcelModel(parcels)
       return h.view('parcels', { model })
     }
@@ -25,6 +26,7 @@ module.exports = [
         payload: parcelPostSchema,
         failAction: async (request, h) => {
           const parcels = await parcelService.getParcels()
+          setAllParcelData(request, parcels)
           const model = parcelModel(parcels, 'You must choose a parcel')
           return h.view('parcels', { model }).takeover()
         }

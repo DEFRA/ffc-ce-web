@@ -5,7 +5,7 @@ version: '3.7'
 
 services:
   ffc-ce-web:
-    command: npm run test
+    command: npm run test:watch
     volumes:
       - ./test/:/usr/src/app/test/
       - ./test-output/:/usr/src/app/test-output/
