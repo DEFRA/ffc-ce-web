@@ -5,21 +5,19 @@ describe('actions inputs model', () => {
   const actions = {
     fg6: {
       id: 'FG1',
-      inputs: [
-        {
-          units: 'metres',
-          description: 'fence length'
-        }
-      ]
+      input: {
+        unit: 'metres',
+        description: 'fence length'
+      }
+
     },
     sw6: {
       id: 'SW6',
-      inputs: [
-        {
-          units: 'hectares',
-          description: 'winter crops area'
-        }
-      ]
+      input: {
+        unit: 'hectares',
+        description: 'winter crops area'
+      }
+
     }
   }
   test('if error provided, should populate errorMessage', () => {

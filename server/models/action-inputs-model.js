@@ -1,10 +1,10 @@
 function getTitle (action) {
-  return `Enter the ${action.inputs[0].description} in ${action.inputs[0].units}`
+  return `Enter the ${action.input.description} in ${action.input.unit}`
 }
 
 function getHint (action, parcelRef) {
   // TODO: Unsafe use of potentially unvalidated user input.
-  return `What is the ${action.inputs[0].description} you wish to claim for in ${action.inputs[0].units} for ${parcelRef}?`
+  return `What is the ${action.input.description} you wish to claim for in ${action.input.unit} for ${parcelRef}?`
 }
 
 function boundsValid (action) {
