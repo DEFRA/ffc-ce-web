@@ -11,7 +11,7 @@ function parcelsModel (parcels, errorMessage) {
     idPrefix: parcelRef,
     name: parcelRef,
     hint: {
-      text: 'Select a land parcel'
+      text: ''
     },
     items
   }
