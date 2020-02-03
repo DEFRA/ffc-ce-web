@@ -1,4 +1,4 @@
-const action = { id: 'FG1', description: 'Fencing' }
+const action = { id: 'FG1', description: 'Fencing', input: { unit: 'metre', description: 'metres', upperbound: 100, lowerbound: 2 } }
 const parcelRef = 'PR12345'
 const allParcels = [{ ref: parcelRef, description: 'Test parcel', totalPerimeter: 10, totalArea: 1 }]
 
@@ -11,6 +11,10 @@ function createMocks () {
   session.getActionId = (request) => action.id
   session.getAllParcelData = (request) => allParcels
   session.setActionInput = jest.fn((request, actionInput) => actionInput)
+
+  jest.mock('../../server/services/actions-service')
+  const actionsService = require('../../server/services/actions-service')
+  actionsService.getActionWithInput.mockResolvedValue(action)
 }
 
 describe('Action Inputs route test', () => {
@@ -36,6 +40,17 @@ describe('Action Inputs route test', () => {
 
     const response = await server.inject(options)
     expect(response.statusCode).toBe(200)
+  })
+
+  test('GET /action-inputs displays bounds if available', async () => {
+    const options = {
+      method: 'GET',
+      url: '/action-inputs'
+    }
+
+    const response = await server.inject(options)
+    expect(response.statusCode).toBe(200)
+    expect(response.payload).toContain(`Please choose a value between ${action.input.lowerbound} and ${action.input.upperbound}`)
   })
 
   test('POST /action-inputs route redirects to GET /calculation-result if calculation requested', async () => {
@@ -87,9 +102,5 @@ describe('Action Inputs route test', () => {
   afterEach(async () => {
     await server.stop()
     jest.clearAllMocks()
-  })
-
-  afterAll(() => {
-    jest.unmock('../../server/session')
   })
 })

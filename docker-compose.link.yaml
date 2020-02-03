@@ -6,7 +6,6 @@ version: '3.7'
 services:
   ffc-ce-web:
     networks:
-      - default
       - ffc-ce
     ports:
       - "3000:3000"

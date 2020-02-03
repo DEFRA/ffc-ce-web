@@ -10,4 +10,9 @@ async function getActions (parcelRef) {
   return actions || []
 }
 
-module.exports = { getActions }
+async function getActionWithInput (parcelRef, actionId) {
+  const response = await wreck.get(`${config.paymentUrl}/parcels/${parcelRef}/actions/${actionId}`, { json: true })
+  return response.payload
+}
+
+module.exports = { getActions, getActionWithInput }

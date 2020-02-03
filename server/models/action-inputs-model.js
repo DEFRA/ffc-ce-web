@@ -7,15 +7,32 @@ function getHint (actionId, parcelRef) {
   return actionId === 'FG1' ? `How long is the fence you want to claim on in metres for ${parcelRef}?` : `What is the area you wish to claim on in hectares for ${parcelRef}?`
 }
 
-function actionsInputsModel (parcelRef, actionId, error, parcels) {
+function boundsValid (action) {
+  return action && action.input && action.input.upperbound && action.input.lowerbound
+}
+
+function getBounds (action) {
+  return boundsValid(action) ? action.input : undefined
+}
+
+function boundsMessage (bounds) {
+  return `Please choose a value between ${bounds.lowerbound} and ${bounds.upperbound}.`
+}
+
+function getBoundsHint (action) {
+  const bounds = getBounds(action)
+  return bounds ? boundsMessage(bounds) : ''
+}
+
+function actionsInputsModel (parcelRef, action, error, parcels) {
   const model = {
     hint: {
-      text: getHint(actionId, parcelRef)
+      text: `${getHint(action.id, parcelRef)} ${getBoundsHint(action)}`
     },
     label: {
       classes: 'govuk-label--xl',
       isPageHeading: true,
-      text: getTitle(actionId)
+      text: getTitle(action.id)
     },
     classes: 'govuk-input--width-10',
     id: 'actionInput',
