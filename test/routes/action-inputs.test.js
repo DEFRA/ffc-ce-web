@@ -1,4 +1,4 @@
-const action = { id: 'FG1', description: 'Fencing', input: { upperbound: '100m', lowerbound: '2m' } }
+const action = { id: 'FG1', description: 'Fencing', input: { unit: 'metre', description: 'metres', upperbound: 100, lowerbound: 2 } }
 const parcelRef = 'PR12345'
 
 let session
@@ -12,7 +12,7 @@ function createMocks () {
 
   jest.mock('../../server/services/actions-service')
   const actionsService = require('../../server/services/actions-service')
-  actionsService.getActions = jest.fn((parcelId) => [action])
+  actionsService.getActionWithInput.mockResolvedValue(action)
 }
 
 describe('Action Inputs route test', () => {
@@ -100,10 +100,5 @@ describe('Action Inputs route test', () => {
   afterEach(async () => {
     await server.stop()
     jest.clearAllMocks()
-  })
-
-  afterAll(() => {
-    jest.unmock('../../server/session')
-    jest.unmock('../../server/services/actions-service')
   })
 })

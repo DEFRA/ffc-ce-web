@@ -10,9 +10,9 @@ module.exports = [
     path: '/action-inputs',
     handler: async (request, h) => {
       const parcelRef = getParcelRef(request)
-      const actions = await actionsService.getActions(parcelRef)
-      const action = actions.find(a => a.id === getActionId(request))
-      const model = actionInputsModel(getParcelRef(request), action)
+      const actionId = getActionId(request)
+      const action = await actionsService.getActionWithInput(parcelRef, actionId)
+      const model = actionInputsModel(parcelRef, action)
       return h.view('action-inputs', { model })
     }
   },
