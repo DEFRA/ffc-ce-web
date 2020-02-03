@@ -3,16 +3,10 @@ const action = {
   description: 'Fencing',
   input: {
     unit: 'metre',
-    description: 'metres',
+    description: 'fence length',
     upperbound: 100,
     lowerbound: 2
-  },
-  inputs: [
-    {
-      unit: 'metre',
-      description: 'fence length'
-    }
-  ]
+  }
 }
 const parcelRef = 'PR12345'
 const allParcels = [{ ref: parcelRef, description: 'Test parcel', totalPerimeter: 10, totalArea: 1 }]
