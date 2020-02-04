@@ -6,7 +6,7 @@ describe('actions inputs model', () => {
     fg6: {
       id: 'FG1',
       input: {
-        unit: 'metres',
+        unit: 'metre',
         description: 'fence length'
       }
 
@@ -14,7 +14,7 @@ describe('actions inputs model', () => {
     sw6: {
       id: 'SW6',
       input: {
-        unit: 'hectares',
+        unit: 'hectare',
         description: 'winter crops area'
       }
 
