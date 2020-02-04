@@ -1,4 +1,13 @@
-const action = { id: 'FG1', description: 'Fencing', input: { unit: 'metre', description: 'metres', upperbound: 100, lowerbound: 2 } }
+const action = {
+  id: 'FG1',
+  description: 'Fencing',
+  input: {
+    unit: 'metre',
+    description: 'fence length',
+    upperbound: 100,
+    lowerbound: 2
+  }
+}
 const parcelRef = 'PR12345'
 const allParcels = [{ ref: parcelRef, description: 'Test parcel', totalPerimeter: 10, totalArea: 1 }]
 

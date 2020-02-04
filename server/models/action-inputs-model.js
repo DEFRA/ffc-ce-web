@@ -1,10 +1,10 @@
-function getTitle (actionId) {
-  return actionId === 'FG1' ? 'Enter a fence length in metres' : 'Enter the area in hectares'
+function getTitle (action) {
+  return `Enter the ${action.input.description} in ${action.input.unit}`
 }
 
-function getHint (actionId, parcelRef) {
+function getHint (action, parcelRef) {
   // TODO: Unsafe use of potentially unvalidated user input.
-  return actionId === 'FG1' ? `How long is the fence you want to claim on in metres for ${parcelRef}?` : `What is the area you wish to claim on in hectares for ${parcelRef}?`
+  return `What is the ${action.input.description} you wish to claim for in ${action.input.unit} for ${parcelRef}?`
 }
 
 function boundsValid (action) {
@@ -27,12 +27,12 @@ function getBoundsHint (action) {
 function actionsInputsModel (parcelRef, action, error, parcels) {
   const model = {
     hint: {
-      text: `${getHint(action.id, parcelRef)} ${getBoundsHint(action)}`
+      text: `${getHint(action, parcelRef)} ${getBoundsHint(action)}`
     },
     label: {
       classes: 'govuk-label--xl',
       isPageHeading: true,
-      text: getTitle(action.id)
+      text: getTitle(action)
     },
     classes: 'govuk-input--width-10',
     id: 'actionInput',

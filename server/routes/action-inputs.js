@@ -28,10 +28,13 @@ module.exports = [
       validate: {
         payload: actionInputPostSchema,
         failAction: async (request, h) => {
+          const parcelRef = getParcelRef(request)
           const parcels = getAllParcelData(request)
+          const actionId = getActionId(request)
+          const action = await actionsService.getActionWithInput(parcelRef, actionId)
           const model = actionInputsModel(
-            getParcelRef(request),
-            getActionId(request),
+            parcelRef,
+            action,
             'You must enter a number greater than zero',
             parcels
           )
