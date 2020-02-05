@@ -1,10 +1,7 @@
 const actionId = 'actionId'
 
 function actionsModel (actions, parcelRef, errorMessage) {
-  const items = actions.map(action => {
-    return { value: action.id, text: `${action.id}: ${action.description}` }
-  })
-  const model = {
+  const selectModel = {
     idPrefix: actionId,
     name: actionId,
     fieldset: {
@@ -17,14 +14,36 @@ function actionsModel (actions, parcelRef, errorMessage) {
     hint: {
       text: `Select an action to apply to parcel ${parcelRef}`
     },
-    items
+    items: actions
+      .filter((action) => { return action.eligible })
+      .map((action) => {
+        return {
+          value: action.id,
+          text: `${action.id}: ${action.description}`
+        }
+      })
   }
+
   if (errorMessage) {
-    model.errorMessage = {
+    selectModel.errorMessage = {
       text: errorMessage
     }
   }
-  return model
+
+  const ineligibleModel = {
+    caption: 'Ineligible actions',
+    captionClasses: 'govuk-label--l',
+    rows: actions
+      .filter((action) => { return !action.eligible })
+      .map((action) => {
+        return [
+          { text: `${action.id}: ${action.description}` },
+          { text: action.reason }
+        ]
+      })
+  }
+
+  return { selectModel, ineligibleModel }
 }
 
 module.exports = actionsModel
