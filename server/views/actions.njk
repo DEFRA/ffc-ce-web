@@ -25,7 +25,7 @@
       </p>    
     {% endif %}    
 
-    {% if model.ineligibleModel %}
+    {% if model.ineligibleModel.rows|length > 0 %}
       {{ govukTable(model.ineligibleModel) }}
     {% endif %}
 </div>
