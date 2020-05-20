@@ -1,7 +1,10 @@
 @Library('defra-library@v-6')
 
-def namespace = 'paul-test-ci'
-def tag = 'test-ci'
+// def namespace = 'paul-test-ci'
+// def tag = 'test-ci'
+def containerSrcFolder = '\\/home\\/node'
+def localSrcFolder = '.'
+def lcovFile = './test-output/lcov.info'
 
 node {
   checkout scm
