@@ -1,61 +1,222 @@
 @Library('defra-library@v-6')
 
-// def repoName = 'ffc-ce-payment-orchestrator'
 def namespace = 'paul-test-ci'
 def tag = 'test-ci'
 
 node {
   checkout scm
 
-  stage('Set PR, and containerTag variables') {
-    (repoName, pr, containerTag, mergedPrNo) = build.getVariables(version.getPackageJsonVersion())
-  }
-
-  echo "repoName = $repoName"
-  echo "pr = $pr"
-  echo "containerTag = $containerTag"
-  echo "mergedPrNo = $mergedPrNo"
-
-  // Need this environment variable set to enable Helm repos in ACR
-
-  stage("Test") {
-    withEnv(['HELM_EXPERIMENTAL_OCI=1']) {
-      withKubeConfig([credentialsId: "test_kube_config"]) {
-        withCredentials([
-          string(credentialsId: 'test_acr_url', variable: 'acrUrl'),
-          usernamePassword(credentialsId: 'test_acr_creds', usernameVariable: 'acrUser', passwordVariable: 'acrPwd'),
-        ]) {
-          def dockerImageName = "$acrUrl/$repoName:docker-$tag"
-          def helmChartName = "$acrUrl/$repoName:helm-$tag"
-          def deploymentName = "$repoName-$tag"
-          def tmpDir = "./install"
-
-          // Build and push docker container
-          sh "az acr login --name $acrUrl --username $acrUser --password $acrPwd"
-          sh "docker-compose -f docker-compose.yaml build --no-cache"
-          sh "docker tag $repoName $dockerImageName"
-          sh "docker push $dockerImageName"
-
-          // Build and push Helm chart
-          sh "helm registry login $acrUrl --username $acrUser --password $acrPwd"
-          sh "helm chart save helm/$repoName $helmChartName"
-          sh "helm chart push $helmChartName"
-
-          // Create K8s namespace
-          sh "kubectl get namespaces $namespace || kubectl create namespace $namespace"
-
-          // Install Helm chart on K8s cluster:
-          // First remove local cached copy and pull from ACR (just to demonstrate it actually works)
-          // Then pull the chart and install
-          sh "helm chart remove $helmChartName"
-          sh "helm chart pull $helmChartName"
-          sh "helm chart export $helmChartName --destination $tmpDir"
-          sh "helm upgrade $deploymentName $tmpDir/$repoName --install --atomic --namespace=$namespace --set image=$dockerImageName"
-        }
-      }
+  try {
+    stage('Set GitHub status as pending') {
+      build.setGithubStatusPending()
     }
+
+    stage('Set PR, and containerTag variables') {
+      (repoName, pr, containerTag, mergedPrNo) = build.getVariables(version.getPackageJsonVersion())
+    }
+  } catch(e) {
+    // stage('Set GitHub status as fail') {
+    //   build.setGithubStatusFailure(e.message)
+    // }
+
+    // stage('Send build failure slack notification') {
+    //   notifySlack.buildFailure(e.message, "#generalbuildfailures")
+    // }
+
+    // if (config.containsKey("failureClosure")) {
+    //   config["failureClosure"]()
+    // }
+
+    throw e
+  } finally {
+    // stage('Clean up test output') {
+    //   test.deleteOutput('defradigital/node-development', containerSrcFolder)
+    // }
+
+    // if (config.containsKey("finallyClosure")) {
+    //   config["finallyClosure"]()
+    // }
   }
+
+
+  // stage("Test") {
+  //   withEnv(['HELM_EXPERIMENTAL_OCI=1']) { // Need this environment variable set to enable Helm repos in ACR
+  //     withKubeConfig([credentialsId: "test_kube_config"]) {
+  //       withCredentials([
+  //         string(credentialsId: 'test_acr_url', variable: 'acrUrl'),
+  //         usernamePassword(credentialsId: 'test_acr_creds', usernameVariable: 'acrUser', passwordVariable: 'acrPwd'),
+  //       ]) {
+  //         def dockerImageName = "$acrUrl/$repoName:docker-$tag"
+  //         def helmChartName = "$acrUrl/$repoName:helm-$tag"
+  //         def deploymentName = "$repoName-$tag"
+  //         def tmpDir = "./install"
+
+  //         // Build and push docker container
+  //         sh "az acr login --name $acrUrl --username $acrUser --password $acrPwd"
+  //         sh "docker-compose -f docker-compose.yaml build --no-cache"
+  //         sh "docker tag $repoName $dockerImageName"
+  //         sh "docker push $dockerImageName"
+
+  //         // Build and push Helm chart
+  //         sh "helm registry login $acrUrl --username $acrUser --password $acrPwd"
+  //         sh "helm chart save helm/$repoName $helmChartName"
+  //         sh "helm chart push $helmChartName"
+
+  //         // Create K8s namespace
+  //         sh "kubectl get namespaces $namespace || kubectl create namespace $namespace"
+
+  //         // Install Helm chart on K8s cluster:
+  //         // First remove local cached copy and pull from ACR (just to demonstrate it actually works)
+  //         // Then pull the chart and install
+  //         sh "helm chart remove $helmChartName"
+  //         sh "helm chart pull $helmChartName"
+  //         sh "helm chart export $helmChartName --destination $tmpDir"
+  //         sh "helm upgrade $deploymentName $tmpDir/$repoName --install --atomic --namespace=$namespace --set image=$dockerImageName"
+  //       }
+  //     }
+  //   }
+  // }
 }
+
+// def call(Map config=[:]) {
+//   def containerSrcFolder = '\\/home\\/node'
+//   def localSrcFolder = '.'
+//   def lcovFile = './test-output/lcov.info'
+//   def sonarQubeEnv = 'SonarQube'
+//   def sonarScanner = 'SonarScanner'
+//   def qualityGateTimeout = 10
+//   def repoName = ''
+//   def pr = ''
+//   def containerTag = ''
+//   def mergedPrNo = ''
+
+//   node {
+//     checkout scm
+//     try {
+//       stage('Set GitHub status as pending') {
+//         build.setGithubStatusPending()
+//       }
+
+//       stage('Set PR, and containerTag variables') {
+//         (repoName, pr, containerTag, mergedPrNo) = build.getVariables(version.getPackageJsonVersion())
+//       }
+
+//       if (pr != '') {
+//         stage('Verify version incremented') {
+//           version.verifyPackageJsonIncremented()
+//         }
+//       }
+
+//       if (config.containsKey("validateClosure")) {
+//         config["validateClosure"]()
+//       }
+
+//       stage('Helm lint') {
+//         test.lintHelm(repoName)
+//       }
+
+//       stage('Build test image') {
+//         build.buildTestImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, BUILD_NUMBER)
+//       }
+
+//       if (config.containsKey("buildClosure")) {
+//         config["buildClosure"]()
+//       }
+
+//       stage('Run tests') {
+//         build.runTests(repoName, repoName, BUILD_NUMBER)
+//       }
+
+//       stage('Create JUnit report') {
+//         test.createReportJUnit()
+//       }
+
+//       stage('Fix lcov report') {
+//         utils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
+//       }
+
+//       stage('SonarQube analysis') {
+//         test.analyseCode(sonarQubeEnv, sonarScanner, test.buildCodeAnalysisDefaultParams(repoName))
+//       }
+
+//       stage("Code quality gate") {
+//         test.waitForQualityGateResult(qualityGateTimeout)
+//       }
+
+//       if (config.containsKey("testClosure")) {
+//         config["testClosure"]()
+//       }
+
+//       stage('Push container image') {
+//         build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, containerTag)
+//       }
+
+//       if (pr != '') {
+//         stage('Helm install') {
+//           helm.deployChart(config.environment, DOCKER_REGISTRY, repoName, containerTag)
+//         }
+//       }
+//       else {
+//         stage('Publish chart') {
+//           helm.publishChart(DOCKER_REGISTRY, repoName, containerTag)
+//         }
+
+//         stage('Trigger GitHub release') {
+//           withCredentials([
+//             string(credentialsId: 'github-auth-token', variable: 'gitToken')
+//           ]) {
+//             release.trigger(containerTag, repoName, containerTag, gitToken)
+//           }
+//         }
+
+//         stage('Trigger Deployment') {
+//           withCredentials([
+//             string(credentialsId: "$repoName-deploy-token", variable: 'jenkinsToken')
+//           ]) {
+//             deploy.trigger(JENKINS_DEPLOY_SITE_ROOT, repoName, jenkinsToken, ['chartVersion': containerTag, 'environment': config.environment])
+//           }
+//         }
+//       }
+
+//       if (mergedPrNo != '') {
+//         stage('Remove merged PR') {
+//           helm.undeployChart(config.environment, repoName, mergedPrNo)
+//         }
+//       }
+
+//       if (config.containsKey("deployClosure")) {
+//         config["deployClosure"]()
+//       }
+
+//       stage('Set GitHub status as success'){
+//         build.setGithubStatusSuccess()
+//       }
+//     } catch(e) {
+//       stage('Set GitHub status as fail') {
+//         build.setGithubStatusFailure(e.message)
+//       }
+
+//       stage('Send build failure slack notification') {
+//         notifySlack.buildFailure(e.message, "#generalbuildfailures")
+//       }
+
+//       if (config.containsKey("failureClosure")) {
+//         config["failureClosure"]()
+//       }
+
+//       throw e
+//     } finally {
+//       stage('Clean up test output') {
+//         test.deleteOutput('defradigital/node-development', containerSrcFolder)
+//       }
+
+//       if (config.containsKey("finallyClosure")) {
+//         config["finallyClosure"]()
+//       }
+//     }
+//   }
+// }
+
 
 // @Library('defra-library@0.0.8')
 // import uk.gov.defra.ffc.DefraUtils
