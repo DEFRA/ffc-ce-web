@@ -43,36 +43,39 @@ node {
     //   utils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
     // }
 
-    // stage('Push container image') {
-    //   build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, containerTag)
-    // }
+    stage('Push container image') {
+      build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, containerTag)
+    }
 
-    // if (pr != '') {
-    //   stage('Helm install') {
-    //     helm.deployChart(config.environment, DOCKER_REGISTRY, repoName, containerTag)
-    //   }
-    // }
-    // else {
-    //   // stage('Publish chart') {
-    //   //   helm.publishChart(DOCKER_REGISTRY, repoName, containerTag)
-    //   // }
+    // Test the master branch branch
+    pr = ''
 
-    //   // stage('Trigger GitHub release') {
-    //   //   withCredentials([
-    //   //     string(credentialsId: 'github-auth-token', variable: 'gitToken')
-    //   //   ]) {
-    //   //     release.trigger(containerTag, repoName, containerTag, gitToken)
-    //   //   }
-    //   // }
+    if (pr != '') {
+      stage('Helm install') {
+        helm.deployChart(config.environment, DOCKER_REGISTRY, repoName, containerTag)
+      }
+    }
+    else {
+      stage('Publish chart') {
+        helm.publishChartToACR(DOCKER_REGISTRY, repoName, containerTag)
+      }
 
-    //   // stage('Trigger Deployment') {
-    //   //   withCredentials([
-    //   //     string(credentialsId: "$repoName-deploy-token", variable: 'jenkinsToken')
-    //   //   ]) {
-    //   //     deploy.trigger(JENKINS_DEPLOY_SITE_ROOT, repoName, jenkinsToken, ['chartVersion': containerTag, 'environment': config.environment])
-    //   //   }
-    //   // }
-    // }
+      // stage('Trigger GitHub release') {
+      //   withCredentials([
+      //     string(credentialsId: 'github-auth-token', variable: 'gitToken')
+      //   ]) {
+      //     release.trigger(containerTag, repoName, containerTag, gitToken)
+      //   }
+      // }
+
+      // stage('Trigger Deployment') {
+      //   withCredentials([
+      //     string(credentialsId: "$repoName-deploy-token", variable: 'jenkinsToken')
+      //   ]) {
+      //     deploy.trigger(JENKINS_DEPLOY_SITE_ROOT, repoName, jenkinsToken, ['chartVersion': containerTag, 'environment': config.environment])
+      //   }
+      // }
+    }
 
     stage('Set GitHub status as success'){
       build.setGithubStatusSuccess()
