@@ -34,6 +34,14 @@ node {
       build.runTests(repoName, repoName, BUILD_NUMBER)
     }
 
+    stage('Create JUnit report') {
+      test.createReportJUnit()
+    }
+
+    stage('Fix lcov report') {
+      utils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
+    }
+
     stage('Set GitHub status as success'){
       build.setGithubStatusSuccess()
     }
