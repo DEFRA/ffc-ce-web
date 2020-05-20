@@ -27,28 +27,28 @@ node {
       test.lintHelm(repoName)
     }
 
-    // stage('Build test image') {
-    //   build.buildTestImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, BUILD_NUMBER)
-    // }
+    stage('Build test image') {
+      build.buildTestImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, BUILD_NUMBER)
+    }
 
-    // stage('Run tests') {
-    //   build.runTests(repoName, repoName, BUILD_NUMBER)
-    // }
+    stage('Run tests') {
+      build.runTests(repoName, repoName, BUILD_NUMBER)
+    }
 
-    // stage('Create JUnit report') {
-    //   test.createReportJUnit()
-    // }
+    stage('Create JUnit report') {
+      test.createReportJUnit()
+    }
 
-    // stage('Fix lcov report') {
-    //   utils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
-    // }
+    stage('Fix lcov report') {
+      utils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
+    }
 
-    // stage('Push container image') {
-    //   build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, containerTag)
-    // }
+    stage('Push container image') {
+      build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, containerTag)
+    }
 
     // Test the master branch branch
-    pr = ''
+    // pr = ''
 
     if (pr != '') {
       stage('Helm install') {
@@ -95,43 +95,4 @@ node {
       test.deleteOutput('defradigital/node-development', containerSrcFolder)
     }
   }
-
-  // stage("Test") {
-  //   withEnv(['HELM_EXPERIMENTAL_OCI=1']) { // Need this environment variable set to enable Helm repos in ACR
-  //     withKubeConfig([credentialsId: "test_kube_config"]) {
-  //       withCredentials([
-  //         string(credentialsId: 'test_acr_url', variable: 'acrUrl'),
-  //         usernamePassword(credentialsId: 'test_acr_creds', usernameVariable: 'acrUser', passwordVariable: 'acrPwd'),
-  //       ]) {
-  //         def dockerImageName = "$acrUrl/$repoName:docker-$tag"
-  //         def helmChartName = "$acrUrl/$repoName:helm-$tag"
-  //         def deploymentName = "$repoName-$tag"
-  //         def tmpDir = "./install"
-
-  //         // Build and push docker container
-  //         sh "az acr login --name $acrUrl --username $acrUser --password $acrPwd"
-
-  //         sh "docker-compose -f docker-compose.yaml build --no-cache"
-  //         sh "docker tag $repoName $dockerImageName"
-  //         sh "docker push $dockerImageName"
-
-  //         // Build and push Helm chart
-  //         sh "helm registry login $acrUrl --username $acrUser --password $acrPwd"
-  //         sh "helm chart save helm/$repoName $helmChartName"
-  //         sh "helm chart push $helmChartName"
-
-  //         // Create K8s namespace
-  //         sh "kubectl get namespaces $namespace || kubectl create namespace $namespace"
-
-  //         // Install Helm chart on K8s cluster:
-  //         // First remove local cached copy and pull from ACR (just to demonstrate it actually works)
-  //         // Then pull the chart and install
-  //         sh "helm chart remove $helmChartName"
-  //         sh "helm chart pull $helmChartName"
-  //         sh "helm chart export $helmChartName --destination $tmpDir"
-  //         sh "helm upgrade $deploymentName $tmpDir/$repoName --install --atomic --namespace=$namespace --set image=$dockerImageName"
-  //       }
-  //     }
-  //   }
-  // }
 }
