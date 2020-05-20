@@ -60,6 +60,10 @@ node {
         helm.publishChartToACR(DOCKER_REGISTRY, repoName, containerTag)
       }
 
+      stage('Deploy Test') {
+        helm.deployRemoteChartFromACR(config.environment, 'ffc-ce', repoName, containerTag)
+      }
+
       // stage('Trigger GitHub release') {
       //   withCredentials([
       //     string(credentialsId: 'github-auth-token', variable: 'gitToken')
