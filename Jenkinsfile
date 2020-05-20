@@ -21,6 +21,10 @@ node {
       }
     }
 
+    stage('Helm lint') {
+      test.lintHelm(repoName)
+    }
+
     stage('Set GitHub status as success'){
       build.setGithubStatusSuccess()
     }
