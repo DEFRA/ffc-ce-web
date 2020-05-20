@@ -60,9 +60,9 @@ node {
         helm.publishChartToACR(DOCKER_REGISTRY, repoName, containerTag)
       }
 
-      stage('Deploy Test') {
-        helm.deployRemoteChartFromACR(config.environment, 'ffc-ce', repoName, containerTag)
-      }
+      // stage('Deploy Test') {
+      //   helm.deployRemoteChartFromACR(config.environment, 'ffc-ce', repoName, containerTag)
+      // }
 
       // stage('Trigger GitHub release') {
       //   withCredentials([
@@ -72,13 +72,13 @@ node {
       //   }
       // }
 
-      // stage('Trigger Deployment') {
-      //   withCredentials([
-      //     string(credentialsId: "$repoName-deploy-token", variable: 'jenkinsToken')
-      //   ]) {
-      //     deploy.trigger(JENKINS_DEPLOY_SITE_ROOT, repoName, jenkinsToken, ['chartVersion': containerTag, 'environment': config.environment])
-      //   }
-      // }
+      stage('Trigger Deployment') {
+        withCredentials([
+          string(credentialsId: 'remote_build_token', variable: 'jenkinsToken')
+        ]) {
+          deploy.trigger(JENKINS_DEPLOY_SITE_ROOT, repoName, jenkinsToken, ['chartVersion': containerTag, 'environment': config.environment])
+        }
+      }
     }
 
     stage('Set GitHub status as success'){
