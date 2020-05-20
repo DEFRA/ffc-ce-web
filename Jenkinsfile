@@ -43,9 +43,9 @@ node {
     //   utils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
     // }
 
-    stage('Push container image') {
-      build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, containerTag)
-    }
+    // stage('Push container image') {
+    //   build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, containerTag)
+    // }
 
     // Test the master branch branch
     pr = ''
