@@ -23,10 +23,9 @@ node {
       }
     }
 
-    // Helm lint steps are different for Azure environment
-    // stage('Helm lint') {
-    //   test.lintHelm(repoName)
-    // }
+    stage('Helm lint') {
+      test.lintHelm(repoName)
+    }
 
     // stage('Build test image') {
     //   build.buildTestImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, BUILD_NUMBER)
