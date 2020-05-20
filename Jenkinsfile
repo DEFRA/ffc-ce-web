@@ -45,6 +45,12 @@ node {
       utils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
     }
 
+    // Skipping SonarQube
+
+    stage('Push container image') {
+      build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, containerTag)
+    }
+
     stage('Set GitHub status as success'){
       build.setGithubStatusSuccess()
     }
@@ -87,6 +93,7 @@ node {
 
   //         // Build and push docker container
   //         sh "az acr login --name $acrUrl --username $acrUser --password $acrPwd"
+
   //         sh "docker-compose -f docker-compose.yaml build --no-cache"
   //         sh "docker tag $repoName $dockerImageName"
   //         sh "docker push $dockerImageName"
