@@ -1,4 +1,4 @@
-@Library('defra-library@v-6')
+@Library('defra-library@psd-770-azure-ci')
 
 def config = [environment: "dev"]
 def containerSrcFolder = '\\/home\\/node'
@@ -28,52 +28,52 @@ node {
     //   test.lintHelm(repoName)
     // }
 
-    stage('Build test image') {
-      build.buildTestImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, BUILD_NUMBER)
-    }
+    // stage('Build test image') {
+    //   build.buildTestImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, BUILD_NUMBER)
+    // }
 
-    stage('Run tests') {
-      build.runTests(repoName, repoName, BUILD_NUMBER)
-    }
+    // stage('Run tests') {
+    //   build.runTests(repoName, repoName, BUILD_NUMBER)
+    // }
 
-    stage('Create JUnit report') {
-      test.createReportJUnit()
-    }
+    // stage('Create JUnit report') {
+    //   test.createReportJUnit()
+    // }
 
-    stage('Fix lcov report') {
-      utils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
-    }
+    // stage('Fix lcov report') {
+    //   utils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
+    // }
 
-    stage('Push container image') {
-      build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, containerTag)
-    }
+    // stage('Push container image') {
+    //   build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, containerTag)
+    // }
 
-    if (pr != '') {
-      stage('Helm install') {
-        helm.deployChart(config.environment, DOCKER_REGISTRY, repoName, containerTag)
-      }
-    }
-    else {
-      // stage('Publish chart') {
-      //   helm.publishChart(DOCKER_REGISTRY, repoName, containerTag)
-      // }
+    // if (pr != '') {
+    //   stage('Helm install') {
+    //     helm.deployChart(config.environment, DOCKER_REGISTRY, repoName, containerTag)
+    //   }
+    // }
+    // else {
+    //   // stage('Publish chart') {
+    //   //   helm.publishChart(DOCKER_REGISTRY, repoName, containerTag)
+    //   // }
 
-      // stage('Trigger GitHub release') {
-      //   withCredentials([
-      //     string(credentialsId: 'github-auth-token', variable: 'gitToken')
-      //   ]) {
-      //     release.trigger(containerTag, repoName, containerTag, gitToken)
-      //   }
-      // }
+    //   // stage('Trigger GitHub release') {
+    //   //   withCredentials([
+    //   //     string(credentialsId: 'github-auth-token', variable: 'gitToken')
+    //   //   ]) {
+    //   //     release.trigger(containerTag, repoName, containerTag, gitToken)
+    //   //   }
+    //   // }
 
-      // stage('Trigger Deployment') {
-      //   withCredentials([
-      //     string(credentialsId: "$repoName-deploy-token", variable: 'jenkinsToken')
-      //   ]) {
-      //     deploy.trigger(JENKINS_DEPLOY_SITE_ROOT, repoName, jenkinsToken, ['chartVersion': containerTag, 'environment': config.environment])
-      //   }
-      // }
-    }
+    //   // stage('Trigger Deployment') {
+    //   //   withCredentials([
+    //   //     string(credentialsId: "$repoName-deploy-token", variable: 'jenkinsToken')
+    //   //   ]) {
+    //   //     deploy.trigger(JENKINS_DEPLOY_SITE_ROOT, repoName, jenkinsToken, ['chartVersion': containerTag, 'environment': config.environment])
+    //   //   }
+    //   // }
+    // }
 
     stage('Set GitHub status as success'){
       build.setGithubStatusSuccess()
