@@ -14,10 +14,14 @@ node {
     stage('Set PR, and containerTag variables') {
       (repoName, pr, containerTag, mergedPrNo) = build.getVariables(version.getPackageJsonVersion())
     }
+
+    stage('Set GitHub status as success'){
+      build.setGithubStatusSuccess()
+    }
   } catch(e) {
-    // stage('Set GitHub status as fail') {
-    //   build.setGithubStatusFailure(e.message)
-    // }
+    stage('Set GitHub status as fail') {
+      build.setGithubStatusFailure(e.message)
+    }
 
     // stage('Send build failure slack notification') {
     //   notifySlack.buildFailure(e.message, "#generalbuildfailures")
