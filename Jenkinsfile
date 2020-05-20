@@ -1,4 +1,4 @@
-@Library('defra-library@psd-770-azure-ci')
+@Library('defra-library@psd-770-azure-ci') _
 
 def config = [environment: "dev"]
 def containerSrcFolder = '\\/home\\/node'
