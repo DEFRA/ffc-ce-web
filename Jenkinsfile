@@ -1,7 +1,6 @@
 @Library('defra-library@v-6')
 
-// def namespace = 'paul-test-ci'
-// def tag = 'test-ci'
+def config = [environment: "dev"]
 def containerSrcFolder = '\\/home\\/node'
 def localSrcFolder = '.'
 def lcovFile = './test-output/lcov.info'
@@ -45,10 +44,35 @@ node {
       utils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
     }
 
-    // Skipping SonarQube
-
     stage('Push container image') {
       build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, containerTag)
+    }
+
+    if (pr != '') {
+      stage('Helm install') {
+        helm.deployChart(config.environment, DOCKER_REGISTRY, repoName, containerTag)
+      }
+    }
+    else {
+      // stage('Publish chart') {
+      //   helm.publishChart(DOCKER_REGISTRY, repoName, containerTag)
+      // }
+
+      // stage('Trigger GitHub release') {
+      //   withCredentials([
+      //     string(credentialsId: 'github-auth-token', variable: 'gitToken')
+      //   ]) {
+      //     release.trigger(containerTag, repoName, containerTag, gitToken)
+      //   }
+      // }
+
+      // stage('Trigger Deployment') {
+      //   withCredentials([
+      //     string(credentialsId: "$repoName-deploy-token", variable: 'jenkinsToken')
+      //   ]) {
+      //     deploy.trigger(JENKINS_DEPLOY_SITE_ROOT, repoName, jenkinsToken, ['chartVersion': containerTag, 'environment': config.environment])
+      //   }
+      // }
     }
 
     stage('Set GitHub status as success'){
@@ -176,18 +200,9 @@ node {
 //         utils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
 //       }
 
-//       stage('SonarQube analysis') {
-//         test.analyseCode(sonarQubeEnv, sonarScanner, test.buildCodeAnalysisDefaultParams(repoName))
-//       }
-
-//       stage("Code quality gate") {
-//         test.waitForQualityGateResult(qualityGateTimeout)
-//       }
-
 //       if (config.containsKey("testClosure")) {
 //         config["testClosure"]()
 //       }
-
 //       stage('Push container image') {
 //         build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, containerTag)
 //       }
@@ -216,12 +231,6 @@ node {
 //           ]) {
 //             deploy.trigger(JENKINS_DEPLOY_SITE_ROOT, repoName, jenkinsToken, ['chartVersion': containerTag, 'environment': config.environment])
 //           }
-//         }
-//       }
-
-//       if (mergedPrNo != '') {
-//         stage('Remove merged PR') {
-//           helm.undeployChart(config.environment, repoName, mergedPrNo)
 //         }
 //       }
 
@@ -257,7 +266,6 @@ node {
 //     }
 //   }
 // }
-
 
 // @Library('defra-library@0.0.8')
 // import uk.gov.defra.ffc.DefraUtils
