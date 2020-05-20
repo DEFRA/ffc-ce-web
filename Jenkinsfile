@@ -15,6 +15,12 @@ node {
       (repoName, pr, containerTag, mergedPrNo) = build.getVariables(version.getPackageJsonVersion())
     }
 
+    if (pr != '') {
+      stage('Verify version incremented') {
+        version.verifyPackageJsonIncremented()
+      }
+    }
+
     stage('Set GitHub status as success'){
       build.setGithubStatusSuccess()
     }
