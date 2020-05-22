@@ -3,6 +3,9 @@ image: ffc-ce-web
 name: ffc-ce-web
 auth:
 imagePullSecret:
+
+deployment:
+
 service:
   port: 80
   type: ClusterIP
