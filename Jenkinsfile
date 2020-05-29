@@ -12,7 +12,7 @@ def config = [environment: 'dev']
   def identityTag = ''
   def mergedPrNo = ''
 
-
+  node {
     checkout scm
     try {
       stage('Set GitHub status as pending') {
