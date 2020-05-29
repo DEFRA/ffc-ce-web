@@ -1,7 +1,7 @@
 {
   "name": "ffc-ce-web",
   "description": "Digital service for calculation engine.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "homepage": "https://github.com/DEFRA/ffc-ce-web",
   "repository": {
     "type": "git",
