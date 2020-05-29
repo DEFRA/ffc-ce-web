@@ -3,7 +3,7 @@ env:
 - name: NODE_ENV
   value: {{ quote .Values.environment }}
 - name: PORT
-  value: {{ .Values.container.port }}
+  value: {{ quote .Values.container.port }}
 - name: PAYMENT_URL
   value: {{ quote .Values.container.paymentUrl }}
 - name: PAYMENT_CALCULATION_URL
