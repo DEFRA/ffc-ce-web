@@ -1,34 +1,48 @@
 environment: development
 image: ffc-ce-web
+namespace: ffc-ce
 name: ffc-ce-web
-auth:
-imagePullSecret:
+workstream: ffc-ce
+
+labels:
+  component: web
+
 service:
   port: 80
   type: ClusterIP
 
+secret:
+  name: ffc-demo-basic-auth
+  type: Opaque
+
+deployment:
+  restartPolicy: Always
+  priorityClassName: low
+  replicas: 1
+  minReadySeconds: 5
+  redeployOnChange: update this field to force a change
+  imagePullSecret:
+  runAsNonRoot: true
+  runAsUser: 1000
+
 container:
   imagePullPolicy: IfNotPresent
-  redeployOnChange: update this field to force a change
   requestMemory: 60Mi
   requestCpu: 60m
   limitMemory: 80Mi
   limitCpu: 80m
-  runAsNonRoot: true
-  runAsUser: 1000
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
-  restartPolicy: Always
-  paymentUrl: http://ffc-ce-payment-orchestrator.ffc-ce
-  paymentCalculationUrl: http://ffc-ce-payment-orchestrator.ffc-ce/payment-calculation
-  cookiePassword:
   restClientTimeoutMillis: 20000
   staticCacheTimeoutMillis: 54000
+  port: 3000
+  cookiePassword: passwordpasswordpasswordpasswordpassword
+  paymentUrl: http://ffc-ce-payment-orchestrator.ffc-ce
+  paymentCalculationUrl: http://ffc-ce-payment-orchestrator.ffc-ce/payment-calculation
+
 ingress:
-  endPoint: ffc-ce
-  server: vividcloudsolutions.co.uk
-replicas: 1
-minReadySeconds: 5
+  class: nginx
+  endpoint: ffc-ce
 
 readinessProbe:
   path: /healthy
